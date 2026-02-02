@@ -108,6 +108,15 @@ function Admin() {
     }
   };
 
+  const handleToggleUnusable = async (id) => {
+    try {
+      await api.toggleUnusable(id);
+      await refresh();
+    } catch (err) {
+      showMessage('error', err.message);
+    }
+  };
+
   const handleResetWalkies = async () => {
     if (!confirm('Reset all walkies? This will clear all sign-outs.')) return;
     try {
@@ -354,8 +363,19 @@ function Admin() {
                   <span>
                     #{w.number}
                     {w.assignedTo && <span style={{ color: '#FF9500' }}> (in use)</span>}
+                    {w.unusable && <span style={{ color: '#FF3B30' }}> (unusable)</span>}
                   </span>
                   <div className="list-item-actions">
+                    <button
+                      className="btn btn-small"
+                      style={{
+                        background: w.unusable ? '#34C759' : '#FF9500',
+                        color: 'white'
+                      }}
+                      onClick={() => handleToggleUnusable(w.id)}
+                    >
+                      {w.unusable ? 'Enable' : 'Disable'}
+                    </button>
                     <button
                       className="btn btn-small btn-outline"
                       onClick={() => setEditingWalkie(w)}

@@ -1,3 +1,158 @@
 {
-  "walkies": []
+  "walkies": [
+    {
+      "id": "7ef29e1d-4e95-445f-ad16-59fa7556f4a4",
+      "number": 1,
+      "notes": "",
+      "assignedTo": "5e2f5ca8-58e2-48b0-9537-72a9d5bf11c8",
+      "assignedAt": "2026-02-02T03:28:47.615Z"
+    },
+    {
+      "id": "a614c79c-6edf-410c-8b56-2fcb5f803f9a",
+      "number": 2,
+      "notes": "",
+      "assignedTo": "5e2f5ca8-58e2-48b0-9537-72a9d5bf11c8",
+      "assignedAt": "2026-02-02T03:28:55.955Z"
+    },
+    {
+      "id": "684379e8-8cba-46ab-bab5-3844e77a94fa",
+      "number": 3,
+      "notes": "",
+      "assignedTo": null,
+      "assignedAt": null
+    },
+    {
+      "id": "37035833-7731-43b5-92a8-c0e86141de2f",
+      "number": 4,
+      "notes": "",
+      "assignedTo": null,
+      "assignedAt": null
+    },
+    {
+      "id": "7c69c038-dcaa-4487-85d0-2ea9dd079301",
+      "number": 5,
+      "notes": "",
+      "assignedTo": null,
+      "assignedAt": null
+    },
+    {
+      "id": "8581dc81-8bde-45f3-af1b-045c4fde0ab6",
+      "number": 6,
+      "notes": "",
+      "assignedTo": null,
+      "assignedAt": null
+    },
+    {
+      "id": "012ebee3-b956-4f2c-8aab-54b61c325e93",
+      "number": 7,
+      "notes": "",
+      "assignedTo": null,
+      "assignedAt": null
+    },
+    {
+      "id": "9847b66c-4b0f-4fdf-b17d-313262dfcee8",
+      "number": 8,
+      "notes": "",
+      "assignedTo": null,
+      "assignedAt": null
+    },
+    {
+      "id": "3c04c22b-dd58-4760-841c-5fde48ecb88d",
+      "number": 9,
+      "notes": "",
+      "assignedTo": null,
+      "assignedAt": null
+    },
+    {
+      "id": "8c126e5b-d201-462a-ac5b-d86139fdb2ae",
+      "number": 10,
+      "notes": "",
+      "assignedTo": null,
+      "assignedAt": null
+    },
+    {
+      "id": "66067794-1f78-44a2-865a-cefccad4ec36",
+      "number": 11,
+      "notes": "",
+      "assignedTo": null,
+      "assignedAt": null
+    },
+    {
+      "id": "33af6a02-73b4-498d-8287-4d23786ffa40",
+      "number": 12,
+      "notes": "",
+      "assignedTo": null,
+      "assignedAt": null
+    },
+    {
+      "id": "b1391fac-3b55-461d-938b-78337c1bcaad",
+      "number": 13,
+      "notes": "",
+      "assignedTo": null,
+      "assignedAt": null
+    },
+    {
+      "id": "beca5c89-8003-40a2-b505-d3e7944e89a6",
+      "number": 14,
+      "notes": "",
+      "assignedTo": null,
+      "assignedAt": null
+    },
+    {
+      "id": "3a46abf7-3377-4fbe-9d07-85b8939630b0",
+      "number": 15,
+      "notes": "",
+      "assignedTo": null,
+      "assignedAt": null
+    },
+    {
+      "id": "2fa9a21b-7e48-44b0-90a8-75c15a5cb0df",
+      "number": 16,
+      "notes": "",
+      "assignedTo": null,
+      "assignedAt": null
+    },
+    {
+      "id": "967d234c-1a8b-4172-9a53-3e24908262df",
+      "number": 17,
+      "notes": "",
+      "assignedTo": null,
+      "assignedAt": null
+    },
+    {
+      "id": "c4978160-2c3d-4079-b41d-2f2f13804c29",
+      "number": 18,
+      "notes": "",
+      "assignedTo": null,
+      "assignedAt": null
+    },
+    {
+      "id": "39a83ff9-e7bd-4bd8-a81a-fc8bae38015a",
+      "number": 19,
+      "notes": "",
+      "assignedTo": null,
+      "assignedAt": null
+    },
+    {
+      "id": "300f02a1-8b24-42b6-a7ff-9ab5e59b9ff9",
+      "number": 20,
+      "notes": "",
+      "assignedTo": null,
+      "assignedAt": null
+    },
+    {
+      "id": "2d2f83f2-f8a2-4bdc-9165-e069ae2bf17e",
+      "number": 21,
+      "notes": "",
+      "assignedTo": null,
+      "assignedAt": null
+    },
+    {
+      "id": "ed7ad5b7-9c29-4dea-9e61-7af92b83eb29",
+      "number": 22,
+      "notes": "",
+      "assignedTo": null,
+      "assignedAt": null
+    }
+  ]
 }

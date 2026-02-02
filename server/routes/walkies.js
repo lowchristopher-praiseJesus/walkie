@@ -29,7 +29,8 @@ router.post('/', (req, res) => {
     number,
     notes: notes || '',
     assignedTo: null,
-    assignedAt: null
+    assignedAt: null,
+    unusable: false
   };
   data.walkies.push(walkie);
   db.saveWalkies(data);
@@ -39,7 +40,7 @@ router.post('/', (req, res) => {
 // PUT update walkie
 router.put('/:id', (req, res) => {
   const { id } = req.params;
-  const { number, notes } = req.body;
+  const { number, notes, unusable } = req.body;
 
   const data = db.getWalkies();
   const index = data.walkies.findIndex(w => w.id === id);
@@ -57,8 +58,24 @@ router.put('/:id', (req, res) => {
   data.walkies[index] = {
     ...data.walkies[index],
     number: number !== undefined ? number : data.walkies[index].number,
-    notes: notes !== undefined ? notes : data.walkies[index].notes
+    notes: notes !== undefined ? notes : data.walkies[index].notes,
+    unusable: unusable !== undefined ? unusable : data.walkies[index].unusable
   };
+  db.saveWalkies(data);
+  res.json(data.walkies[index]);
+});
+
+// POST toggle walkie unusable status
+router.post('/:id/toggle-unusable', (req, res) => {
+  const { id } = req.params;
+
+  const data = db.getWalkies();
+  const index = data.walkies.findIndex(w => w.id === id);
+  if (index === -1) {
+    return res.status(404).json({ error: 'Walkie not found' });
+  }
+
+  data.walkies[index].unusable = !data.walkies[index].unusable;
   db.saveWalkies(data);
   res.json(data.walkies[index]);
 });
@@ -93,6 +110,10 @@ router.post('/sign-out', (req, res) => {
 
   if (walkiesData.walkies[index].assignedTo) {
     return res.status(400).json({ error: 'Walkie already signed out' });
+  }
+
+  if (walkiesData.walkies[index].unusable) {
+    return res.status(400).json({ error: 'Walkie is marked as unusable' });
   }
 
   walkiesData.walkies[index].assignedTo = volunteerId;

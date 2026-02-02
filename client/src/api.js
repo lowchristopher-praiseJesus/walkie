@@ -31,6 +31,7 @@ export const api = {
   signOutWalkie: (walkieId, volunteerId) => fetchJSON('/walkies/sign-out', { method: 'POST', body: JSON.stringify({ walkieId, volunteerId }) }),
   returnWalkie: (id) => fetchJSON(`/walkies/return/${id}`, { method: 'POST' }),
   resetWalkies: () => fetchJSON('/walkies/reset', { method: 'POST' }),
+  toggleUnusable: (id) => fetchJSON(`/walkies/${id}/toggle-unusable`, { method: 'POST' }),
 
   // Admin
   verifyPin: (pin) => fetchJSON('/admin/verify', { method: 'POST', body: JSON.stringify({ pin }) }),

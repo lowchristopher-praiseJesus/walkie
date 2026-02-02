@@ -1,3 +1,16 @@
 {
-  "volunteers": []
+  "volunteers": [
+    {
+      "id": "5e2f5ca8-58e2-48b0-9537-72a9d5bf11c8",
+      "firstName": "Chris",
+      "lastName": "Low",
+      "phone": ""
+    },
+    {
+      "id": "44296024-8414-4503-b603-e46ae483b216",
+      "firstName": "Esther",
+      "lastName": "Wong",
+      "phone": ""
+    }
+  ]
 }

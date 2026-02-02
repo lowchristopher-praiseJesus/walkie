@@ -18,7 +18,7 @@ function SignOut() {
     : [];
 
   const availableWalkies = walkies
-    .filter(w => !w.assignedTo)
+    .filter(w => !w.assignedTo && !w.unusable)
     .sort((a, b) => a.number - b.number);
 
   const handleSignOut = async (walkie) => {
