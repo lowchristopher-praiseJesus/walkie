@@ -96,15 +96,15 @@
       "id": "beca5c89-8003-40a2-b505-d3e7944e89a6",
       "number": 14,
       "notes": "",
-      "assignedTo": null,
-      "assignedAt": null
+      "assignedTo": "3a5c37e6-1178-4e9a-87db-064d19a56df7",
+      "assignedAt": "2026-02-02T04:08:10.518Z"
     },
     {
       "id": "3a46abf7-3377-4fbe-9d07-85b8939630b0",
       "number": 15,
       "notes": "",
-      "assignedTo": null,
-      "assignedAt": null
+      "assignedTo": "2c040db5-1f4c-47c4-82ab-dd5977ea05a6",
+      "assignedAt": "2026-02-02T04:08:59.597Z"
     },
     {
       "id": "2fa9a21b-7e48-44b0-90a8-75c15a5cb0df",
@@ -152,8 +152,8 @@
       "id": "ed7ad5b7-9c29-4dea-9e61-7af92b83eb29",
       "number": 22,
       "notes": "",
-      "assignedTo": null,
-      "assignedAt": null
+      "assignedTo": "4b85aa61-fdef-4c29-9d2b-7425c7eeef7d",
+      "assignedAt": "2026-02-02T04:07:53.517Z"
     }
   ]
 }

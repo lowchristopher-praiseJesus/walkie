@@ -27,7 +27,7 @@ function Home() {
       </div>
 
       <Link to="/sign-out">
-        <button className="btn btn-primary">Sign Out Walkie</button>
+        <button className="btn btn-primary">Take Walkie</button>
       </Link>
 
       <Link to="/return">
