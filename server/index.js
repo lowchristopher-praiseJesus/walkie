@@ -11,6 +11,9 @@ app.use(express.json());
 const volunteersRouter = require('./routes/volunteers');
 app.use('/api/volunteers', volunteersRouter);
 
+const walkiesRouter = require('./routes/walkies');
+app.use('/api/walkies', walkiesRouter);
+
 // Health check
 app.get('/api/health', (req, res) => {
   res.json({ status: 'ok' });
