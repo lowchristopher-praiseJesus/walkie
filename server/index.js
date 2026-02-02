@@ -8,6 +8,9 @@ const PORT = process.env.PORT || 3001;
 app.use(cors());
 app.use(express.json());
 
+const volunteersRouter = require('./routes/volunteers');
+app.use('/api/volunteers', volunteersRouter);
+
 // Health check
 app.get('/api/health', (req, res) => {
   res.json({ status: 'ok' });
