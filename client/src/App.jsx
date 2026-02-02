@@ -4,7 +4,6 @@ import Home from './pages/Home';
 import SignOut from './pages/SignOut';
 import Return from './pages/Return';
 import Admin from './pages/Admin';
-import './App.css';
 
 function App() {
   return (
