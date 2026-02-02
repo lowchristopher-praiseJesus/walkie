@@ -46,7 +46,7 @@ function SignOut() {
         <div className="back-link">
           <Link to="/">&larr; Back</Link>
         </div>
-        <h2 className="section-title">Select first letter of first name</h2>
+        <h2 className="section-title">Type the first letter of your name</h2>
         <div className="letter-grid">
           {LETTERS.map(letter => (
             <button
