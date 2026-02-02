@@ -14,7 +14,7 @@ function SignOut() {
   const [message, setMessage] = useState(null);
 
   const filteredVolunteers = selectedLetter
-    ? volunteers.filter(v => v.lastName.toUpperCase().startsWith(selectedLetter))
+    ? volunteers.filter(v => v.firstName.toUpperCase().startsWith(selectedLetter))
     : [];
 
   const availableWalkies = walkies
@@ -39,7 +39,7 @@ function SignOut() {
         <div className="back-link">
           <Link to="/">&larr; Back</Link>
         </div>
-        <h2 className="section-title">Select first letter of last name</h2>
+        <h2 className="section-title">Select first letter of first name</h2>
         <div className="letter-grid">
           {LETTERS.map(letter => (
             <button
@@ -67,7 +67,7 @@ function SignOut() {
         <h2 className="section-title">Select your name ({selectedLetter})</h2>
         {filteredVolunteers.length === 0 ? (
           <div className="empty-state">
-            <p>No volunteers found with last name starting with "{selectedLetter}"</p>
+            <p>No volunteers found with first name starting with "{selectedLetter}"</p>
           </div>
         ) : (
           <ul className="volunteer-list">
@@ -77,7 +77,7 @@ function SignOut() {
                 className="volunteer-item"
                 onClick={() => setSelectedVolunteer(v)}
               >
-                {v.lastName}, {v.firstName}
+                {v.firstName} {v.lastName}
               </li>
             ))}
           </ul>
