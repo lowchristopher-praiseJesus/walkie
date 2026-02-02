@@ -40,7 +40,7 @@ function Admin() {
       await api.addVolunteer(newVolunteer);
       setNewVolunteer({ firstName: '', lastName: '', phone: '' });
       await refresh();
-      showMessage('success', 'Volunteer added');
+      showMessage('success', 'Server added');
     } catch (err) {
       showMessage('error', err.message);
     }
@@ -52,18 +52,18 @@ function Admin() {
       await api.updateVolunteer(editingVolunteer.id, editingVolunteer);
       setEditingVolunteer(null);
       await refresh();
-      showMessage('success', 'Volunteer updated');
+      showMessage('success', 'Server updated');
     } catch (err) {
       showMessage('error', err.message);
     }
   };
 
   const handleDeleteVolunteer = async (id) => {
-    if (!confirm('Delete this volunteer?')) return;
+    if (!confirm('Delete this server?')) return;
     try {
       await api.deleteVolunteer(id);
       await refresh();
-      showMessage('success', 'Volunteer deleted');
+      showMessage('success', 'Server deleted');
     } catch (err) {
       showMessage('error', err.message);
     }
@@ -188,7 +188,7 @@ function Admin() {
           className={`tab ${activeTab === 'volunteers' ? 'active' : ''}`}
           onClick={() => setActiveTab('volunteers')}
         >
-          Volunteers
+          Servers
         </button>
         <button
           className={`tab ${activeTab === 'walkies' ? 'active' : ''}`}
@@ -209,7 +209,7 @@ function Admin() {
         <div>
           {editingVolunteer ? (
             <form onSubmit={handleUpdateVolunteer}>
-              <h3 className="section-title">Edit Volunteer</h3>
+              <h3 className="section-title">Edit Server</h3>
               <div className="form-group">
                 <label>First Name</label>
                 <input
@@ -243,7 +243,7 @@ function Admin() {
           ) : (
             <>
               <form onSubmit={handleAddVolunteer}>
-                <h3 className="section-title">Add Volunteer</h3>
+                <h3 className="section-title">Add Server</h3>
                 <div className="form-group">
                   <label>First Name</label>
                   <input
@@ -269,11 +269,11 @@ function Admin() {
                     onChange={(e) => setNewVolunteer({...newVolunteer, phone: e.target.value})}
                   />
                 </div>
-                <button type="submit" className="btn btn-primary">Add Volunteer</button>
+                <button type="submit" className="btn btn-primary">Add Server</button>
               </form>
 
               <h3 className="section-title" style={{ marginTop: 24 }}>
-                Volunteers ({volunteers.length})
+                Servers ({volunteers.length})
               </h3>
               {sortedVolunteers.map(v => (
                 <div key={v.id} className="list-item">

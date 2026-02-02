@@ -74,7 +74,7 @@ function SignOut() {
         <h2 className="section-title">Select your name ({selectedLetter})</h2>
         {filteredVolunteers.length === 0 ? (
           <div className="empty-state">
-            <p>No volunteers found with first name starting with "{selectedLetter}"</p>
+            <p>No servers found with first name starting with "{selectedLetter}"</p>
           </div>
         ) : (
           <ul className="volunteer-list">
@@ -106,7 +106,7 @@ function SignOut() {
     <div className="container">
       <div className="back-link">
         <a href="#" onClick={(e) => { e.preventDefault(); setSelectedVolunteer(null); }}>
-          &larr; Back to volunteers
+          &larr; Back to servers
         </a>
       </div>
 
