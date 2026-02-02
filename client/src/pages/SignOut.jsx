@@ -21,9 +21,11 @@ function SignOut() {
     .filter(w => !w.assignedTo && !w.unusable)
     .sort((a, b) => a.number - b.number);
 
-  const getAssignedWalkie = (volunteerId) => {
-    const walkie = walkies.find(w => w.assignedTo === volunteerId);
-    return walkie ? walkie.number : null;
+  const getAssignedWalkies = (volunteerId) => {
+    return walkies
+      .filter(w => w.assignedTo === volunteerId)
+      .map(w => w.number)
+      .sort((a, b) => a - b);
   };
 
   const handleSignOut = async (walkie) => {
@@ -77,7 +79,7 @@ function SignOut() {
         ) : (
           <ul className="volunteer-list">
             {filteredVolunteers.map(v => {
-              const assignedWalkie = getAssignedWalkie(v.id);
+              const assignedWalkies = getAssignedWalkies(v.id);
               return (
                 <li
                   key={v.id}
@@ -85,9 +87,9 @@ function SignOut() {
                   onClick={() => setSelectedVolunteer(v)}
                 >
                   {v.firstName} {v.lastName}
-                  {assignedWalkie && (
+                  {assignedWalkies.length > 0 && (
                     <span style={{ color: '#FF9500', marginLeft: 8 }}>
-                      (has walkie #{assignedWalkie})
+                      (has {assignedWalkies.length === 1 ? 'walkie' : 'walkies'} #{assignedWalkies.join(', #')})
                     </span>
                   )}
                 </li>
