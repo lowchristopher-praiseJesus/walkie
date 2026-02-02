@@ -14,6 +14,9 @@ app.use('/api/volunteers', volunteersRouter);
 const walkiesRouter = require('./routes/walkies');
 app.use('/api/walkies', walkiesRouter);
 
+const adminRouter = require('./routes/admin');
+app.use('/api/admin', adminRouter);
+
 // Health check
 app.get('/api/health', (req, res) => {
   res.json({ status: 'ok' });
