@@ -33,7 +33,7 @@
   }
 
   * {
-    @apply border-border;
+    border-color: #27272a;
   }
 
   body {
