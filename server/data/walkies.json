@@ -4,22 +4,23 @@
       "id": "7ef29e1d-4e95-445f-ad16-59fa7556f4a4",
       "number": 1,
       "notes": "",
-      "assignedTo": "5e2f5ca8-58e2-48b0-9537-72a9d5bf11c8",
-      "assignedAt": "2026-02-02T03:28:47.615Z"
+      "assignedTo": null,
+      "assignedAt": null
     },
     {
       "id": "a614c79c-6edf-410c-8b56-2fcb5f803f9a",
       "number": 2,
       "notes": "",
-      "assignedTo": "5e2f5ca8-58e2-48b0-9537-72a9d5bf11c8",
-      "assignedAt": "2026-02-02T03:28:55.955Z"
+      "assignedTo": null,
+      "assignedAt": null
     },
     {
       "id": "684379e8-8cba-46ab-bab5-3844e77a94fa",
       "number": 3,
       "notes": "",
       "assignedTo": null,
-      "assignedAt": null
+      "assignedAt": null,
+      "unusable": false
     },
     {
       "id": "37035833-7731-43b5-92a8-c0e86141de2f",

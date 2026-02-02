@@ -220,12 +220,11 @@ function Admin() {
                 />
               </div>
               <div className="form-group">
-                <label>Last Name</label>
+                <label>Last Name (optional)</label>
                 <input
                   className="input"
                   value={editingVolunteer.lastName}
                   onChange={(e) => setEditingVolunteer({...editingVolunteer, lastName: e.target.value})}
-                  required
                 />
               </div>
               <div className="form-group">
@@ -255,12 +254,11 @@ function Admin() {
                   />
                 </div>
                 <div className="form-group">
-                  <label>Last Name</label>
+                  <label>Last Name (optional)</label>
                   <input
                     className="input"
                     value={newVolunteer.lastName}
                     onChange={(e) => setNewVolunteer({...newVolunteer, lastName: e.target.value})}
-                    required
                   />
                 </div>
                 <div className="form-group">

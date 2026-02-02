@@ -13,15 +13,15 @@ router.get('/', (req, res) => {
 // POST new volunteer
 router.post('/', (req, res) => {
   const { firstName, lastName, phone } = req.body;
-  if (!firstName || !lastName) {
-    return res.status(400).json({ error: 'firstName and lastName required' });
+  if (!firstName) {
+    return res.status(400).json({ error: 'firstName required' });
   }
 
   const data = db.getVolunteers();
   const volunteer = {
     id: uuidv4(),
     firstName,
-    lastName,
+    lastName: lastName || '',
     phone: phone || ''
   };
   data.volunteers.push(volunteer);
