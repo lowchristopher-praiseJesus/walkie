@@ -7,9 +7,18 @@ export function AppProvider({ children }) {
   const [volunteers, setVolunteers] = useState([]);
   const [walkies, setWalkies] = useState([]);
   const [liftCards, setLiftCards] = useState([]);
-  const [config, setConfig] = useState({ eventName: 'Event' });
+  const [config, setConfig] = useState({ eventName: 'Event', theme: 'default' });
   const [isAdmin, setIsAdmin] = useState(false);
   const [loading, setLoading] = useState(true);
+
+  // Apply theme to document
+  useEffect(() => {
+    if (config.theme === 'lunar') {
+      document.documentElement.setAttribute('data-theme', 'lunar');
+    } else {
+      document.documentElement.removeAttribute('data-theme');
+    }
+  }, [config.theme]);
 
   const refresh = async () => {
     try {

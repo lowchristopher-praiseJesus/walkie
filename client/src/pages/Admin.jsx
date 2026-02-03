@@ -3,9 +3,11 @@ import { Link } from 'react-router-dom';
 import { useApp } from '../context/AppContext';
 import { api } from '../api';
 import { Button, Input, PinInput, Card, CardHeader, CardTitle, CardContent, Tabs, TabsList, TabsTrigger, Alert, Badge } from '../components/ui';
+import PageWrapper from '../components/PageWrapper';
 
 function Admin() {
   const { volunteers, walkies, liftCards, config, isAdmin, setIsAdmin, refresh } = useApp();
+  const isLunarTheme = config.theme === 'lunar';
   const [pin, setPin] = useState('');
   const [pinError, setPinError] = useState(false);
   const [activeTab, setActiveTab] = useState('volunteers');
@@ -213,6 +215,16 @@ function Admin() {
     }
   };
 
+  const handleThemeChange = async (newTheme) => {
+    try {
+      await api.updateConfig({ theme: newTheme });
+      await refresh();
+      showMessage('success', `Theme changed to ${newTheme === 'lunar' ? 'Lunar New Year' : 'Default'}`);
+    } catch (err) {
+      showMessage('error', err.message);
+    }
+  };
+
   const handleClearAuditLog = async () => {
     if (!confirm('Clear all audit log entries? This cannot be undone.')) return;
     try {
@@ -238,13 +250,13 @@ function Admin() {
   // PIN screen
   if (!isAdmin) {
     return (
-      <div className="min-h-screen flex flex-col">
+      <PageWrapper centered>
         <div className="max-w-md mx-auto w-full px-4 py-6">
-          <Link to="/" className="text-[--color-primary] hover:underline text-base mb-4 inline-block">
+          <Link to="/" className={`hover:underline text-base mb-4 inline-block ${isLunarTheme ? 'text-amber-300' : 'text-[--color-primary]'}`}>
             &larr; Back
           </Link>
           <header className="text-center py-6 mb-8">
-            <h1 className="text-2xl font-bold text-zinc-100">Admin Access</h1>
+            <h1 className={`text-2xl font-bold ${isLunarTheme ? 'text-amber-100' : 'text-zinc-100'}`}>Admin Access</h1>
           </header>
           <form onSubmit={handlePinSubmit} className="space-y-4">
             <PinInput
@@ -257,7 +269,7 @@ function Admin() {
             <Button type="submit" className="w-full">Enter</Button>
           </form>
         </div>
-      </div>
+      </PageWrapper>
     );
   }
 
@@ -269,9 +281,9 @@ function Admin() {
   const sortedLiftCards = [...liftCards].sort((a, b) => a.number - b.number);
 
   return (
-    <div className="min-h-screen">
+    <PageWrapper>
       <div className="max-w-md mx-auto w-full px-4 py-6">
-        <Link to="/" className="text-[--color-primary] hover:underline text-base mb-4 inline-block">
+        <Link to="/" className={`hover:underline text-base mb-4 inline-block ${isLunarTheme ? 'text-amber-300' : 'text-[--color-primary]'}`}>
           &larr; Back
         </Link>
 
@@ -620,6 +632,46 @@ function Admin() {
 
               <Card>
                 <CardHeader>
+                  <CardTitle>Theme</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-3">
+                  <button
+                    onClick={() => handleThemeChange('default')}
+                    className={`w-full p-4 rounded-lg border-2 text-left transition-all ${
+                      config.theme !== 'lunar'
+                        ? 'border-[--color-primary] bg-zinc-800'
+                        : 'border-zinc-700 bg-zinc-800 hover:border-zinc-600'
+                    }`}
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-blue-700 ring-2 ring-white/20"></div>
+                      <div>
+                        <div className="font-medium text-zinc-100">Default Dark</div>
+                        <div className="text-sm text-zinc-400">Blue and green accent colors</div>
+                      </div>
+                    </div>
+                  </button>
+                  <button
+                    onClick={() => handleThemeChange('lunar')}
+                    className={`w-full p-4 rounded-lg border-2 text-left transition-all ${
+                      config.theme === 'lunar'
+                        ? 'border-[--color-primary] bg-zinc-800'
+                        : 'border-zinc-700 bg-zinc-800 hover:border-zinc-600'
+                    }`}
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className="w-8 h-8 rounded-full bg-gradient-to-br from-red-600 to-amber-500 ring-2 ring-white/20"></div>
+                      <div>
+                        <div className="font-medium text-zinc-100">Lunar New Year</div>
+                        <div className="text-sm text-zinc-400">Red and gold prosperity theme</div>
+                      </div>
+                    </div>
+                  </button>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader>
                   <CardTitle>Reset</CardTitle>
                 </CardHeader>
                 <CardContent>
@@ -676,7 +728,7 @@ function Admin() {
           )}
         </Tabs>
       </div>
-    </div>
+    </PageWrapper>
   );
 }
 

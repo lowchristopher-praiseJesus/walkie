@@ -15,15 +15,15 @@ router.post('/verify', (req, res) => {
   }
 });
 
-// GET config (event name only, not PIN)
+// GET config (event name and theme, not PIN)
 router.get('/config', (req, res) => {
   const config = db.getConfig();
-  res.json({ eventName: config.eventName });
+  res.json({ eventName: config.eventName, theme: config.theme || 'default' });
 });
 
 // PUT update config
 router.put('/config', (req, res) => {
-  const { eventName, adminPin } = req.body;
+  const { eventName, adminPin, theme } = req.body;
   const config = db.getConfig();
 
   if (eventName !== undefined) {
@@ -32,9 +32,12 @@ router.put('/config', (req, res) => {
   if (adminPin !== undefined) {
     config.adminPin = adminPin;
   }
+  if (theme !== undefined) {
+    config.theme = theme;
+  }
 
   db.saveConfig(config);
-  res.json({ eventName: config.eventName });
+  res.json({ eventName: config.eventName, theme: config.theme || 'default' });
 });
 
 // GET audit log

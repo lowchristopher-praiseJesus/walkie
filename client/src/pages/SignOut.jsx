@@ -1,14 +1,16 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useApp } from '../context/AppContext';
 import { api } from '../api';
 import { Button, Alert, Badge } from '../components/ui';
+import PageWrapper from '../components/PageWrapper';
 
 const MAX_WALKIES = 2;
 const MAX_LIFT_CARDS = 2;
 
 function SignOut() {
-  const { volunteers, walkies, liftCards, refresh } = useApp();
+  const { volunteers, walkies, liftCards, config, refresh } = useApp();
+  const isLunarTheme = config.theme === 'lunar';
   const navigate = useNavigate();
 
   const [selectedLetter, setSelectedLetter] = useState(null);
@@ -17,6 +19,7 @@ function SignOut() {
   const [selectedLiftCards, setSelectedLiftCards] = useState([]);
   const [message, setMessage] = useState(null);
   const [submitting, setSubmitting] = useState(false);
+  const liftCardsSectionRef = useRef(null);
 
   // Get only letters that have volunteers
   const availableLetters = [...new Set(
@@ -57,6 +60,12 @@ function SignOut() {
       setSelectedWalkies(selectedWalkies.filter(w => w.id !== walkie.id));
     } else if (selectedWalkies.length < MAX_WALKIES) {
       setSelectedWalkies([...selectedWalkies, walkie]);
+      // Scroll to lift cards section after 1 second on mobile
+      setTimeout(() => {
+        if (liftCardsSectionRef.current) {
+          liftCardsSectionRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      }, 1000);
     }
   };
 
@@ -105,17 +114,21 @@ function SignOut() {
   // Step 1: Select letter
   if (!selectedLetter) {
     return (
-      <div className="min-h-screen">
+      <PageWrapper>
         <div className="max-w-md mx-auto w-full px-4 py-6">
-          <Link to="/" className="text-[--color-primary] hover:underline text-base mb-4 inline-block">
+          <Link to="/" className={`hover:underline text-base mb-4 inline-block ${isLunarTheme ? 'text-amber-300' : 'text-[--color-primary]'}`}>
             &larr; Back
           </Link>
-          <h2 className="text-zinc-400 text-base mb-4">Type the first letter of your name</h2>
+          <h2 className={`text-base mb-4 ${isLunarTheme ? 'text-amber-200' : 'text-zinc-400'}`}>Type the first letter of your name</h2>
           <div className="grid grid-cols-6 gap-2">
             {availableLetters.map(letter => (
               <button
                 key={letter}
-                className="aspect-square flex items-center justify-center text-lg font-semibold bg-zinc-800 border-2 border-zinc-700 rounded-lg text-zinc-100 hover:bg-zinc-700 active:bg-[--color-primary] active:border-[--color-primary] transition-colors"
+                className={`aspect-square flex items-center justify-center text-lg font-semibold border-2 rounded-lg transition-colors active:scale-95 ${
+                  isLunarTheme
+                    ? 'bg-black/40 border-amber-700/50 text-amber-100 hover:bg-black/60 hover:border-amber-500 active:bg-red-700 active:border-red-500'
+                    : 'bg-zinc-800 border-zinc-700 text-zinc-100 hover:bg-zinc-700 active:bg-[--color-primary] active:border-[--color-primary]'
+                }`}
                 onClick={() => setSelectedLetter(letter)}
               >
                 {letter}
@@ -123,24 +136,24 @@ function SignOut() {
             ))}
           </div>
         </div>
-      </div>
+      </PageWrapper>
     );
   }
 
   // Step 2: Select volunteer
   if (!selectedVolunteer) {
     return (
-      <div className="min-h-screen">
+      <PageWrapper>
         <div className="max-w-md mx-auto w-full px-4 py-6">
           <button
             onClick={() => setSelectedLetter(null)}
-            className="text-[--color-primary] hover:underline text-base mb-4"
+            className={`hover:underline text-base mb-4 ${isLunarTheme ? 'text-amber-300' : 'text-[--color-primary]'}`}
           >
             &larr; Back to letters
           </button>
-          <h2 className="text-zinc-400 text-base mb-4">Select your name ({selectedLetter})</h2>
+          <h2 className={`text-base mb-4 ${isLunarTheme ? 'text-amber-200' : 'text-zinc-400'}`}>Select your name ({selectedLetter})</h2>
           {filteredVolunteers.length === 0 ? (
-            <div className="text-center py-12 text-zinc-500">
+            <div className={`text-center py-12 ${isLunarTheme ? 'text-amber-300/70' : 'text-zinc-500'}`}>
               <p>No servers found with first name starting with "{selectedLetter}"</p>
             </div>
           ) : (
@@ -152,10 +165,14 @@ function SignOut() {
                 return (
                   <button
                     key={v.id}
-                    className="w-full text-left p-4 bg-zinc-800 rounded-lg border-2 border-transparent hover:border-zinc-600 active:border-[--color-primary] transition-colors"
+                    className={`w-full text-left p-4 rounded-lg border-2 border-transparent transition-colors ${
+                      isLunarTheme
+                        ? 'bg-black/40 hover:border-amber-600 active:border-red-500'
+                        : 'bg-zinc-800 hover:border-zinc-600 active:border-[--color-primary]'
+                    }`}
                     onClick={() => setSelectedVolunteer(v)}
                   >
-                    <span className="text-zinc-100">{v.firstName} {v.lastName}</span>
+                    <span className={isLunarTheme ? 'text-amber-100' : 'text-zinc-100'}>{v.firstName} {v.lastName}</span>
                     {hasEquipment && (
                       <Badge variant="warning" className="ml-2">
                         has {[
@@ -170,17 +187,17 @@ function SignOut() {
             </div>
           )}
         </div>
-      </div>
+      </PageWrapper>
     );
   }
 
   // Step 3: Select equipment
   return (
-    <div className="min-h-screen">
+    <PageWrapper>
       <div className="max-w-md mx-auto w-full px-4 py-6">
         <button
           onClick={() => { setSelectedVolunteer(null); setSelectedWalkies([]); setSelectedLiftCards([]); }}
-          className="text-[--color-primary] hover:underline text-base mb-4"
+          className={`hover:underline text-base mb-4 ${isLunarTheme ? 'text-amber-300' : 'text-[--color-primary]'}`}
         >
           &larr; Back to servers
         </button>
@@ -191,19 +208,19 @@ function SignOut() {
           </Alert>
         )}
 
-        <h2 className="text-zinc-400 text-base mb-4">
+        <h2 className={`text-base mb-4 ${isLunarTheme ? 'text-amber-200' : 'text-zinc-400'}`}>
           Hi {selectedVolunteer.firstName}! Select your equipment
         </h2>
 
         {/* Walkies Section */}
-        <h3 className="text-zinc-500 text-sm font-medium mt-4 mb-2 flex items-center gap-2">
+        <h3 className={`text-sm font-medium mt-4 mb-2 flex items-center gap-2 ${isLunarTheme ? 'text-amber-300/80' : 'text-zinc-500'}`}>
           Walkies (up to {MAX_WALKIES})
           {selectedWalkies.length > 0 && (
             <Badge variant="success">{formatSelectedNumbers(selectedWalkies)} selected</Badge>
           )}
         </h3>
         {availableWalkies.length === 0 ? (
-          <div className="text-center py-4 text-zinc-500 text-sm">
+          <div className={`text-center py-4 text-sm ${isLunarTheme ? 'text-amber-300/70' : 'text-zinc-500'}`}>
             <p>No walkies available</p>
           </div>
         ) : (
@@ -217,7 +234,9 @@ function SignOut() {
                   className={`aspect-square flex flex-col items-center justify-center rounded-xl border-2 text-2xl font-bold transition-all ${
                     isSelected
                       ? 'bg-red-600 border-red-500 text-white shadow-lg shadow-red-600/50 ring-2 ring-red-400'
-                      : 'bg-zinc-800 border-zinc-700 text-zinc-100 hover:border-zinc-500'
+                      : isLunarTheme
+                        ? 'bg-black/40 border-amber-700/50 text-amber-100 hover:border-amber-500'
+                        : 'bg-zinc-800 border-zinc-700 text-zinc-100 hover:border-zinc-500'
                   } ${isDisabled ? 'opacity-40 cursor-not-allowed' : 'cursor-pointer active:scale-95'}`}
                   onClick={() => !isDisabled && toggleWalkie(w)}
                   disabled={isDisabled}
@@ -230,14 +249,14 @@ function SignOut() {
         )}
 
         {/* Lift Cards Section */}
-        <h3 className="text-zinc-500 text-sm font-medium mt-6 mb-2 flex items-center gap-2">
+        <h3 ref={liftCardsSectionRef} className={`text-sm font-medium mt-6 mb-2 flex items-center gap-2 ${isLunarTheme ? 'text-amber-300/80' : 'text-zinc-500'}`}>
           Lift Cards (up to {MAX_LIFT_CARDS}, optional)
           {selectedLiftCards.length > 0 && (
             <Badge variant="success">{formatSelectedNumbers(selectedLiftCards)} selected</Badge>
           )}
         </h3>
         {availableLiftCards.length === 0 ? (
-          <div className="text-center py-4 text-zinc-500 text-sm">
+          <div className={`text-center py-4 text-sm ${isLunarTheme ? 'text-amber-300/70' : 'text-zinc-500'}`}>
             <p>No lift cards available</p>
           </div>
         ) : (
@@ -251,7 +270,9 @@ function SignOut() {
                   className={`aspect-square flex flex-col items-center justify-center rounded-xl border-2 text-2xl font-bold transition-all ${
                     isSelected
                       ? 'bg-red-600 border-red-500 text-white shadow-lg shadow-red-600/50 ring-2 ring-red-400'
-                      : 'bg-zinc-800 border-zinc-700 text-zinc-100 hover:border-zinc-500'
+                      : isLunarTheme
+                        ? 'bg-black/40 border-amber-700/50 text-amber-100 hover:border-amber-500'
+                        : 'bg-zinc-800 border-zinc-700 text-zinc-100 hover:border-zinc-500'
                   } ${isDisabled ? 'opacity-40 cursor-not-allowed' : 'cursor-pointer active:scale-95'}`}
                   onClick={() => !isDisabled && toggleLiftCard(lc)}
                   disabled={isDisabled}
@@ -273,7 +294,7 @@ function SignOut() {
           {submitting ? 'Signing out...' : 'Done'}
         </Button>
       </div>
-    </div>
+    </PageWrapper>
   );
 }
 

@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { useApp } from '../context/AppContext';
 import { api } from '../api';
 import { Alert } from '../components/ui';
+import PageWrapper from '../components/PageWrapper';
 
 const STORAGE_KEY = 'returnPageState';
 
@@ -23,7 +24,8 @@ function saveState(initialItems, returnedItems) {
 }
 
 function Return() {
-  const { volunteers, walkies, liftCards, refresh } = useApp();
+  const { volunteers, walkies, liftCards, config, refresh } = useApp();
+  const isLunarTheme = config.theme === 'lunar';
   const [message, setMessage] = useState(null);
 
   // Initialize state from sessionStorage or current data
@@ -210,9 +212,9 @@ function Return() {
   };
 
   return (
-    <div className="min-h-screen">
+    <PageWrapper>
       <div className="max-w-md mx-auto w-full px-4 py-6">
-        <Link to="/" className="text-[--color-primary] hover:underline text-base mb-4 inline-block">
+        <Link to="/" className={`hover:underline text-base mb-4 inline-block ${isLunarTheme ? 'text-amber-300' : 'text-[--color-primary]'}`}>
           &larr; Back
         </Link>
 
@@ -222,10 +224,10 @@ function Return() {
           </Alert>
         )}
 
-        <h2 className="text-zinc-400 text-base mb-4">Tap item to return</h2>
+        <h2 className={`text-base mb-4 ${isLunarTheme ? 'text-amber-200' : 'text-zinc-400'}`}>Tap item to return</h2>
 
         {totalCheckedOut === 0 ? (
-          <div className="text-center py-12 text-zinc-500">
+          <div className={`text-center py-12 ${isLunarTheme ? 'text-amber-300/70' : 'text-zinc-500'}`}>
             <p>No equipment is currently signed out</p>
           </div>
         ) : (
@@ -233,7 +235,7 @@ function Return() {
             {/* Walkies Section */}
             {checkedOutWalkies.length > 0 && (
               <>
-                <h3 className="text-zinc-500 text-sm font-medium mt-4 mb-2">
+                <h3 className={`text-sm font-medium mt-4 mb-2 ${isLunarTheme ? 'text-amber-300/80' : 'text-zinc-500'}`}>
                   Walkies ({checkedOutWalkies.length})
                 </h3>
                 <div className="grid grid-cols-[repeat(auto-fill,minmax(80px,1fr))] gap-3">
@@ -245,12 +247,14 @@ function Return() {
                         className={`aspect-square flex flex-col items-center justify-center rounded-xl border-2 transition-all cursor-pointer active:scale-95 ${
                           isReturned
                             ? 'opacity-40 bg-zinc-700 border-zinc-600 line-through'
-                            : 'bg-zinc-800 border-zinc-700 hover:border-zinc-500'
+                            : isLunarTheme
+                              ? 'bg-black/40 border-amber-700/50 hover:border-amber-500'
+                              : 'bg-zinc-800 border-zinc-700 hover:border-zinc-500'
                         }`}
                         onClick={() => handleWalkieClick(w)}
                       >
-                        <span className="text-2xl font-bold text-zinc-100">{w.number}</span>
-                        <span className="text-xs text-zinc-400 mt-1 px-1 truncate max-w-full">
+                        <span className={`text-2xl font-bold ${isLunarTheme ? 'text-amber-100' : 'text-zinc-100'}`}>{w.number}</span>
+                        <span className={`text-xs mt-1 px-1 truncate max-w-full ${isLunarTheme ? 'text-amber-300/80' : 'text-zinc-400'}`}>
                           {getVolunteerName(w.assignedTo)}
                         </span>
                       </button>
@@ -263,7 +267,7 @@ function Return() {
             {/* Lift Cards Section */}
             {checkedOutLiftCards.length > 0 && (
               <>
-                <h3 className="text-zinc-500 text-sm font-medium mt-6 mb-2">
+                <h3 className={`text-sm font-medium mt-6 mb-2 ${isLunarTheme ? 'text-amber-300/80' : 'text-zinc-500'}`}>
                   Lift Cards ({checkedOutLiftCards.length})
                 </h3>
                 <div className="grid grid-cols-[repeat(auto-fill,minmax(80px,1fr))] gap-3">
@@ -275,12 +279,14 @@ function Return() {
                         className={`aspect-square flex flex-col items-center justify-center rounded-xl border-2 transition-all cursor-pointer active:scale-95 ${
                           isReturned
                             ? 'opacity-40 bg-zinc-700 border-zinc-600 line-through'
-                            : 'bg-amber-900/30 border-[--color-gold] hover:border-amber-400'
+                            : isLunarTheme
+                              ? 'bg-amber-900/40 border-amber-500 hover:border-amber-400'
+                              : 'bg-amber-900/30 border-[--color-gold] hover:border-amber-400'
                         }`}
                         onClick={() => handleLiftCardClick(lc)}
                       >
-                        <span className="text-2xl font-bold text-zinc-100">{lc.number}</span>
-                        <span className="text-xs text-zinc-400 mt-1 px-1 truncate max-w-full">
+                        <span className={`text-2xl font-bold ${isLunarTheme ? 'text-amber-100' : 'text-zinc-100'}`}>{lc.number}</span>
+                        <span className={`text-xs mt-1 px-1 truncate max-w-full ${isLunarTheme ? 'text-amber-300/80' : 'text-zinc-400'}`}>
                           {getVolunteerName(lc.assignedTo)}
                         </span>
                       </button>
@@ -292,7 +298,7 @@ function Return() {
           </>
         )}
       </div>
-    </div>
+    </PageWrapper>
   );
 }
 
