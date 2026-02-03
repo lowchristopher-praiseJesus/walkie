@@ -33,7 +33,7 @@ function loginPage(error) {
 </head>
 <body>
   <div class="login-box">
-    <h1>Walkie</h1>
+    <h1>Walkie Tracker</h1>
     ${error ? '<p class="error">Incorrect password</p>' : ''}
     <form method="POST" action="/login">
       <label for="password">Password</label>
