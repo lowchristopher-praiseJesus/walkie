@@ -1,9 +1,11 @@
 import { useState, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useApp } from '../context/AppContext';
-import { api } from '../api';
+import { storage } from '../storage';
 import { Button, Alert, Badge } from '../components/ui';
 import PageWrapper from '../components/PageWrapper';
+import walkieImg from '../assets/walkie-dark.png';
+import rfidCardImg from '../assets/rfid_card.png';
 
 const MAX_WALKIES = 2;
 const MAX_LIFT_CARDS = 2;
@@ -78,7 +80,7 @@ function SignOut() {
     }
   };
 
-  const handleDone = async () => {
+  const handleDone = () => {
     if (selectedWalkies.length === 0 && selectedLiftCards.length === 0) {
       setMessage({ type: 'error', text: 'Please select at least one item' });
       return;
@@ -89,17 +91,17 @@ function SignOut() {
       const results = [];
 
       for (const walkie of selectedWalkies) {
-        await api.signOutWalkie(walkie.id, selectedVolunteer.id);
+        storage.signOutWalkie(walkie.id, selectedVolunteer.id);
         results.push(`Walkie #${walkie.number}`);
       }
 
       for (const liftCard of selectedLiftCards) {
-        await api.signOutLiftCard(liftCard.id, selectedVolunteer.id);
+        storage.signOutLiftCard(liftCard.id, selectedVolunteer.id);
         results.push(`Lift Card #${liftCard.number}`);
       }
 
       setMessage({ type: 'success', text: `${results.join(', ')} signed out to ${selectedVolunteer.firstName}` });
-      await refresh();
+      refresh();
       setTimeout(() => navigate('/'), 1500);
     } catch (err) {
       setMessage({ type: 'error', text: err.message });
@@ -241,7 +243,7 @@ function SignOut() {
                   onClick={() => !isDisabled && toggleWalkie(w)}
                   disabled={isDisabled}
                 >
-                  <img src="/walkie-dark.png" alt="Walkie" className="absolute inset-0 w-full h-full object-contain p-1" />
+                  <img src={walkieImg} alt="Walkie" className="absolute inset-0 w-full h-full object-contain p-1" />
                   {isSelected && <div className="absolute inset-0 bg-red-600/40" />}
                   <span className="relative z-10 text-lg font-bold text-white bg-black/60 rounded px-1.5 mb-1">{w.number}</span>
                 </button>
@@ -279,7 +281,7 @@ function SignOut() {
                   onClick={() => !isDisabled && toggleLiftCard(lc)}
                   disabled={isDisabled}
                 >
-                  <img src="/rfid_card.png" alt="Lift Card" className="absolute inset-0 w-full h-full object-contain p-1" />
+                  <img src={rfidCardImg} alt="Lift Card" className="absolute inset-0 w-full h-full object-contain p-1" />
                   {isSelected && <div className="absolute inset-0 bg-red-600/40" />}
                   <span className="relative z-10 text-lg font-bold text-white bg-black/60 rounded px-1.5 mb-1">{lc.number}</span>
                 </button>

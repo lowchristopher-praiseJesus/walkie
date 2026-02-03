@@ -1,9 +1,11 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useApp } from '../context/AppContext';
-import { api } from '../api';
+import { storage } from '../storage';
 import { Alert } from '../components/ui';
 import PageWrapper from '../components/PageWrapper';
+import walkieImg from '../assets/walkie-dark.png';
+import rfidCardImg from '../assets/rfid_card.png';
 
 const STORAGE_KEY = 'returnPageState';
 
@@ -129,12 +131,12 @@ function Return() {
     return v ? `${v.firstName} ${v.lastName.charAt(0)}.` : 'Unknown';
   };
 
-  const handleWalkieClick = async (walkie) => {
+  const handleWalkieClick = (walkie) => {
     const isReturned = returnedItems.walkies[walkie.id];
 
     if (isReturned) {
       try {
-        await api.signOutWalkie(walkie.id, isReturned);
+        storage.signOutWalkie(walkie.id, isReturned);
         setState(prev => {
           const { [walkie.id]: _, ...rest } = prev.returnedItems.walkies;
           const updated = { ...prev, returnedItems: { ...prev.returnedItems, walkies: rest } };
@@ -142,14 +144,14 @@ function Return() {
           return updated;
         });
         setMessage({ type: 'success', text: `Walkie #${walkie.number} restored` });
-        await refresh();
+        refresh();
         setTimeout(() => setMessage(null), 1000);
       } catch (err) {
         setMessage({ type: 'error', text: err.message });
       }
     } else {
       try {
-        await api.returnWalkie(walkie.id);
+        storage.returnWalkie(walkie.id);
         setState(prev => {
           const updated = {
             ...prev,
@@ -162,7 +164,7 @@ function Return() {
           return updated;
         });
         setMessage({ type: 'success', text: `Walkie #${walkie.number} returned` });
-        await refresh();
+        refresh();
         setTimeout(() => setMessage(null), 1000);
       } catch (err) {
         setMessage({ type: 'error', text: err.message });
@@ -170,12 +172,12 @@ function Return() {
     }
   };
 
-  const handleLiftCardClick = async (liftCard) => {
+  const handleLiftCardClick = (liftCard) => {
     const isReturned = returnedItems.liftCards[liftCard.id];
 
     if (isReturned) {
       try {
-        await api.signOutLiftCard(liftCard.id, isReturned);
+        storage.signOutLiftCard(liftCard.id, isReturned);
         setState(prev => {
           const { [liftCard.id]: _, ...rest } = prev.returnedItems.liftCards;
           const updated = { ...prev, returnedItems: { ...prev.returnedItems, liftCards: rest } };
@@ -183,14 +185,14 @@ function Return() {
           return updated;
         });
         setMessage({ type: 'success', text: `Lift Card #${liftCard.number} restored` });
-        await refresh();
+        refresh();
         setTimeout(() => setMessage(null), 1000);
       } catch (err) {
         setMessage({ type: 'error', text: err.message });
       }
     } else {
       try {
-        await api.returnLiftCard(liftCard.id);
+        storage.returnLiftCard(liftCard.id);
         setState(prev => {
           const updated = {
             ...prev,
@@ -203,7 +205,7 @@ function Return() {
           return updated;
         });
         setMessage({ type: 'success', text: `Lift Card #${liftCard.number} returned` });
-        await refresh();
+        refresh();
         setTimeout(() => setMessage(null), 1000);
       } catch (err) {
         setMessage({ type: 'error', text: err.message });
@@ -253,7 +255,7 @@ function Return() {
                         }`}
                         onClick={() => handleWalkieClick(w)}
                       >
-                        <img src="/walkie-dark.png" alt="Walkie" className="absolute inset-0 w-full h-full object-contain p-1" />
+                        <img src={walkieImg} alt="Walkie" className="absolute inset-0 w-full h-full object-contain p-1" />
                         {isReturned && <div className="absolute inset-0 bg-zinc-700/60" />}
                         <span className="relative z-10 text-lg font-bold text-white bg-black/60 rounded px-1.5 mb-0.5">{w.number}</span>
                         <span className={`relative z-10 text-xs px-1 truncate max-w-full mb-1 ${isLunarTheme ? 'text-amber-300/80' : 'text-zinc-300'}`}>
@@ -287,7 +289,7 @@ function Return() {
                         }`}
                         onClick={() => handleLiftCardClick(lc)}
                       >
-                        <img src="/rfid_card.png" alt="Lift Card" className="absolute inset-0 w-full h-full object-contain p-1" />
+                        <img src={rfidCardImg} alt="Lift Card" className="absolute inset-0 w-full h-full object-contain p-1" />
                         {isReturned && <div className="absolute inset-0 bg-zinc-700/60" />}
                         <span className="relative z-10 text-lg font-bold text-white bg-black/60 rounded px-1.5 mb-0.5">{lc.number}</span>
                         <span className={`relative z-10 text-xs px-1 truncate max-w-full mb-1 ${isLunarTheme ? 'text-amber-300/80' : 'text-zinc-700'}`}>

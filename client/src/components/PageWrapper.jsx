@@ -1,9 +1,11 @@
 import { useApp } from '../context/AppContext';
+import defaultBg from '../assets/default-bg.png';
+import lunarBg from '../assets/lunar-bg.png';
 
 export function PageWrapper({ children, centered = false }) {
   const { config } = useApp();
   const isLunarTheme = config.theme === 'lunar';
-  const backgroundImage = isLunarTheme ? '/lunar-bg.png' : '/default-bg.png';
+  const backgroundImage = isLunarTheme ? lunarBg : defaultBg;
 
   return (
     <div

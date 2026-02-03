@@ -1,15 +1,17 @@
 import { createContext, useContext, useState, useEffect } from 'react';
-import { api } from '../api';
+import { storage, initializeStorage } from '../storage';
+
+initializeStorage();
 
 const AppContext = createContext();
 
 export function AppProvider({ children }) {
-  const [volunteers, setVolunteers] = useState([]);
-  const [walkies, setWalkies] = useState([]);
-  const [liftCards, setLiftCards] = useState([]);
-  const [config, setConfig] = useState({ eventName: 'Event', theme: 'default' });
+  const [volunteers, setVolunteers] = useState(() => storage.getVolunteers());
+  const [walkies, setWalkies] = useState(() => storage.getWalkies());
+  const [liftCards, setLiftCards] = useState(() => storage.getLiftCards());
+  const [config, setConfig] = useState(() => storage.getConfig());
   const [isAdmin, setIsAdmin] = useState(false);
-  const [loading, setLoading] = useState(true);
+  const [loading] = useState(false);
 
   // Apply theme to document
   useEffect(() => {
@@ -20,28 +22,12 @@ export function AppProvider({ children }) {
     }
   }, [config.theme]);
 
-  const refresh = async () => {
-    try {
-      const [vols, walks, lifts, cfg] = await Promise.all([
-        api.getVolunteers(),
-        api.getWalkies(),
-        api.getLiftCards(),
-        api.getConfig(),
-      ]);
-      setVolunteers(vols);
-      setWalkies(walks);
-      setLiftCards(lifts);
-      setConfig(cfg);
-    } catch (err) {
-      console.error('Failed to load data:', err);
-    } finally {
-      setLoading(false);
-    }
+  const refresh = () => {
+    setVolunteers(storage.getVolunteers());
+    setWalkies(storage.getWalkies());
+    setLiftCards(storage.getLiftCards());
+    setConfig(storage.getConfig());
   };
-
-  useEffect(() => {
-    refresh();
-  }, []);
 
   const value = {
     volunteers,

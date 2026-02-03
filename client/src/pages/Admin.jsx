@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useApp } from '../context/AppContext';
-import { api } from '../api';
+import { storage } from '../storage';
 import { Button, Input, PinInput, Card, CardHeader, CardTitle, CardContent, Tabs, TabsList, TabsTrigger, Alert, Badge } from '../components/ui';
 import PageWrapper from '../components/PageWrapper';
 
@@ -22,18 +22,9 @@ function Admin() {
   const [editingLiftCard, setEditingLiftCard] = useState(null);
   const [eventName, setEventName] = useState(config.eventName);
   const [auditLog, setAuditLog] = useState([]);
-  const [loadingLog, setLoadingLog] = useState(false);
 
-  const fetchAuditLog = async () => {
-    setLoadingLog(true);
-    try {
-      const log = await api.getAuditLog();
-      setAuditLog(log);
-    } catch (err) {
-      console.error('Failed to fetch audit log:', err);
-    } finally {
-      setLoadingLog(false);
-    }
+  const fetchAuditLog = () => {
+    setAuditLog(storage.getAuditLog());
   };
 
   useEffect(() => {
@@ -42,10 +33,10 @@ function Admin() {
     }
   }, [isAdmin, activeTab]);
 
-  const handlePinSubmit = async (e) => {
+  const handlePinSubmit = (e) => {
     e.preventDefault();
     try {
-      await api.verifyPin(pin);
+      storage.verifyPin(pin);
       setIsAdmin(true);
       setPinError(false);
     } catch {
@@ -59,35 +50,35 @@ function Admin() {
   };
 
   // Volunteer handlers
-  const handleAddVolunteer = async (e) => {
+  const handleAddVolunteer = (e) => {
     e.preventDefault();
     try {
-      await api.addVolunteer(newVolunteer);
+      storage.addVolunteer(newVolunteer);
       setNewVolunteer({ firstName: '', lastName: '', phone: '' });
-      await refresh();
+      refresh();
       showMessage('success', 'Server added');
     } catch (err) {
       showMessage('error', err.message);
     }
   };
 
-  const handleUpdateVolunteer = async (e) => {
+  const handleUpdateVolunteer = (e) => {
     e.preventDefault();
     try {
-      await api.updateVolunteer(editingVolunteer.id, editingVolunteer);
+      storage.updateVolunteer(editingVolunteer.id, editingVolunteer);
       setEditingVolunteer(null);
-      await refresh();
+      refresh();
       showMessage('success', 'Server updated');
     } catch (err) {
       showMessage('error', err.message);
     }
   };
 
-  const handleDeleteVolunteer = async (id) => {
+  const handleDeleteVolunteer = (id) => {
     if (!confirm('Delete this server?')) return;
     try {
-      await api.deleteVolunteer(id);
-      await refresh();
+      storage.deleteVolunteer(id);
+      refresh();
       showMessage('success', 'Server deleted');
     } catch (err) {
       showMessage('error', err.message);
@@ -95,140 +86,138 @@ function Admin() {
   };
 
   // Walkie handlers
-  const handleAddWalkie = async (e) => {
+  const handleAddWalkie = (e) => {
     e.preventDefault();
     try {
-      await api.addWalkie({ ...newWalkie, number: parseInt(newWalkie.number) });
+      storage.addWalkie({ ...newWalkie, number: parseInt(newWalkie.number) });
       setNewWalkie({ number: '', notes: '' });
-      await refresh();
+      refresh();
       showMessage('success', 'Walkie added');
     } catch (err) {
       showMessage('error', err.message);
     }
   };
 
-  const handleUpdateWalkie = async (e) => {
+  const handleUpdateWalkie = (e) => {
     e.preventDefault();
     try {
-      await api.updateWalkie(editingWalkie.id, {
+      storage.updateWalkie(editingWalkie.id, {
         ...editingWalkie,
         number: parseInt(editingWalkie.number)
       });
       setEditingWalkie(null);
-      await refresh();
+      refresh();
       showMessage('success', 'Walkie updated');
     } catch (err) {
       showMessage('error', err.message);
     }
   };
 
-  const handleDeleteWalkie = async (id) => {
+  const handleDeleteWalkie = (id) => {
     if (!confirm('Delete this walkie?')) return;
     try {
-      await api.deleteWalkie(id);
-      await refresh();
+      storage.deleteWalkie(id);
+      refresh();
       showMessage('success', 'Walkie deleted');
     } catch (err) {
       showMessage('error', err.message);
     }
   };
 
-  const handleToggleWalkieUnusable = async (id) => {
+  const handleToggleWalkieUnusable = (id) => {
     try {
-      await api.toggleWalkieUnusable(id);
-      await refresh();
+      storage.toggleWalkieUnusable(id);
+      refresh();
     } catch (err) {
       showMessage('error', err.message);
     }
   };
 
   // Lift Card handlers
-  const handleAddLiftCard = async (e) => {
+  const handleAddLiftCard = (e) => {
     e.preventDefault();
     try {
-      await api.addLiftCard({ ...newLiftCard, number: parseInt(newLiftCard.number) });
+      storage.addLiftCard({ ...newLiftCard, number: parseInt(newLiftCard.number) });
       setNewLiftCard({ number: '', notes: '' });
-      await refresh();
+      refresh();
       showMessage('success', 'Lift card added');
     } catch (err) {
       showMessage('error', err.message);
     }
   };
 
-  const handleUpdateLiftCard = async (e) => {
+  const handleUpdateLiftCard = (e) => {
     e.preventDefault();
     try {
-      await api.updateLiftCard(editingLiftCard.id, {
+      storage.updateLiftCard(editingLiftCard.id, {
         ...editingLiftCard,
         number: parseInt(editingLiftCard.number)
       });
       setEditingLiftCard(null);
-      await refresh();
+      refresh();
       showMessage('success', 'Lift card updated');
     } catch (err) {
       showMessage('error', err.message);
     }
   };
 
-  const handleDeleteLiftCard = async (id) => {
+  const handleDeleteLiftCard = (id) => {
     if (!confirm('Delete this lift card?')) return;
     try {
-      await api.deleteLiftCard(id);
-      await refresh();
+      storage.deleteLiftCard(id);
+      refresh();
       showMessage('success', 'Lift card deleted');
     } catch (err) {
       showMessage('error', err.message);
     }
   };
 
-  const handleToggleLiftCardUnusable = async (id) => {
+  const handleToggleLiftCardUnusable = (id) => {
     try {
-      await api.toggleLiftCardUnusable(id);
-      await refresh();
+      storage.toggleLiftCardUnusable(id);
+      refresh();
     } catch (err) {
       showMessage('error', err.message);
     }
   };
 
-  const handleResetAllEquipment = async () => {
+  const handleResetAllEquipment = () => {
     if (!confirm('Reset all equipment? This will clear all sign-outs for walkies and lift cards.')) return;
     try {
-      await Promise.all([
-        api.resetWalkies(),
-        api.resetLiftCards()
-      ]);
+      storage.resetWalkies();
+      storage.resetLiftCards();
       sessionStorage.removeItem('returnPageState');
-      await refresh();
+      refresh();
       showMessage('success', 'All equipment reset');
     } catch (err) {
       showMessage('error', err.message);
     }
   };
 
-  const handleUpdateEventName = async () => {
+  const handleUpdateEventName = () => {
     try {
-      await api.updateConfig({ eventName });
-      await refresh();
+      storage.updateConfig({ eventName });
+      refresh();
       showMessage('success', 'Event name updated');
     } catch (err) {
       showMessage('error', err.message);
     }
   };
 
-  const handleThemeChange = async (newTheme) => {
+  const handleThemeChange = (newTheme) => {
     try {
-      await api.updateConfig({ theme: newTheme });
-      await refresh();
+      storage.updateConfig({ theme: newTheme });
+      refresh();
       showMessage('success', `Theme changed to ${newTheme === 'lunar' ? 'Lunar New Year' : 'Default'}`);
     } catch (err) {
       showMessage('error', err.message);
     }
   };
 
-  const handleClearAuditLog = async () => {
+  const handleClearAuditLog = () => {
     if (!confirm('Clear all audit log entries? This cannot be undone.')) return;
     try {
-      await api.clearAuditLog();
+      storage.clearAuditLog();
       setAuditLog([]);
       showMessage('success', 'Audit log cleared');
     } catch (err) {
@@ -700,9 +689,7 @@ function Admin() {
                 )}
               </div>
 
-              {loadingLog ? (
-                <div className="text-center py-8 text-zinc-500">Loading...</div>
-              ) : auditLog.length === 0 ? (
+              {auditLog.length === 0 ? (
                 <div className="text-center py-8 text-zinc-500">No activity recorded yet</div>
               ) : (
                 <div className="space-y-2">
