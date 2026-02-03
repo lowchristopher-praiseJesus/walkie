@@ -231,17 +231,19 @@ function SignOut() {
               return (
                 <button
                   key={w.id}
-                  className={`aspect-square flex flex-col items-center justify-center rounded-xl border-2 text-2xl font-bold transition-all ${
+                  className={`relative aspect-square flex flex-col items-center justify-end rounded-xl border-2 overflow-hidden transition-all ${
                     isSelected
-                      ? 'bg-red-600 border-red-500 text-white shadow-lg shadow-red-600/50 ring-2 ring-red-400'
+                      ? 'bg-black border-red-500 shadow-lg shadow-red-600/50 ring-2 ring-red-400'
                       : isLunarTheme
-                        ? 'bg-black/40 border-amber-700/50 text-amber-100 hover:border-amber-500'
-                        : 'bg-zinc-800 border-zinc-700 text-zinc-100 hover:border-zinc-500'
+                        ? 'bg-black border-amber-700/50 hover:border-amber-500'
+                        : 'bg-black border-zinc-700 hover:border-zinc-500'
                   } ${isDisabled ? 'opacity-40 cursor-not-allowed' : 'cursor-pointer active:scale-95'}`}
                   onClick={() => !isDisabled && toggleWalkie(w)}
                   disabled={isDisabled}
                 >
-                  {w.number}
+                  <img src="/walkie-dark.png" alt="Walkie" className="absolute inset-0 w-full h-full object-contain p-1" />
+                  {isSelected && <div className="absolute inset-0 bg-red-600/40" />}
+                  <span className="relative z-10 text-lg font-bold text-white bg-black/60 rounded px-1.5 mb-1">{w.number}</span>
                 </button>
               );
             })}
@@ -267,17 +269,19 @@ function SignOut() {
               return (
                 <button
                   key={lc.id}
-                  className={`aspect-square flex flex-col items-center justify-center rounded-xl border-2 text-2xl font-bold transition-all ${
+                  className={`relative aspect-square flex flex-col items-center justify-end rounded-xl border-2 overflow-hidden transition-all ${
                     isSelected
-                      ? 'bg-red-600 border-red-500 text-white shadow-lg shadow-red-600/50 ring-2 ring-red-400'
+                      ? 'bg-white border-red-500 shadow-lg shadow-red-600/50 ring-2 ring-red-400'
                       : isLunarTheme
-                        ? 'bg-black/40 border-amber-700/50 text-amber-100 hover:border-amber-500'
-                        : 'bg-zinc-800 border-zinc-700 text-zinc-100 hover:border-zinc-500'
+                        ? 'bg-white border-amber-700/50 hover:border-amber-500'
+                        : 'bg-white border-zinc-700 hover:border-zinc-500'
                   } ${isDisabled ? 'opacity-40 cursor-not-allowed' : 'cursor-pointer active:scale-95'}`}
                   onClick={() => !isDisabled && toggleLiftCard(lc)}
                   disabled={isDisabled}
-              >
-                  {lc.number}
+                >
+                  <img src="/rfid_card.png" alt="Lift Card" className="absolute inset-0 w-full h-full object-contain p-1" />
+                  {isSelected && <div className="absolute inset-0 bg-red-600/40" />}
+                  <span className="relative z-10 text-lg font-bold text-white bg-black/60 rounded px-1.5 mb-1">{lc.number}</span>
                 </button>
               );
             })}

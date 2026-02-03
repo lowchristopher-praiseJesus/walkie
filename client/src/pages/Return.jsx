@@ -244,17 +244,19 @@ function Return() {
                     return (
                       <button
                         key={w.id}
-                        className={`aspect-square flex flex-col items-center justify-center rounded-xl border-2 transition-all cursor-pointer active:scale-95 ${
+                        className={`relative aspect-square flex flex-col items-center justify-end rounded-xl border-2 overflow-hidden transition-all cursor-pointer active:scale-95 ${
                           isReturned
-                            ? 'opacity-40 bg-zinc-700 border-zinc-600 line-through'
+                            ? 'opacity-40 bg-black border-zinc-600'
                             : isLunarTheme
-                              ? 'bg-black/40 border-amber-700/50 hover:border-amber-500'
-                              : 'bg-zinc-800 border-zinc-700 hover:border-zinc-500'
+                              ? 'bg-black border-amber-700/50 hover:border-amber-500'
+                              : 'bg-black border-zinc-700 hover:border-zinc-500'
                         }`}
                         onClick={() => handleWalkieClick(w)}
                       >
-                        <span className={`text-2xl font-bold ${isLunarTheme ? 'text-amber-100' : 'text-zinc-100'}`}>{w.number}</span>
-                        <span className={`text-xs mt-1 px-1 truncate max-w-full ${isLunarTheme ? 'text-amber-300/80' : 'text-zinc-400'}`}>
+                        <img src="/walkie-dark.png" alt="Walkie" className="absolute inset-0 w-full h-full object-contain p-1" />
+                        {isReturned && <div className="absolute inset-0 bg-zinc-700/60" />}
+                        <span className="relative z-10 text-lg font-bold text-white bg-black/60 rounded px-1.5 mb-0.5">{w.number}</span>
+                        <span className={`relative z-10 text-xs px-1 truncate max-w-full mb-1 ${isLunarTheme ? 'text-amber-300/80' : 'text-zinc-300'}`}>
                           {getVolunteerName(w.assignedTo)}
                         </span>
                       </button>
@@ -276,17 +278,19 @@ function Return() {
                     return (
                       <button
                         key={lc.id}
-                        className={`aspect-square flex flex-col items-center justify-center rounded-xl border-2 transition-all cursor-pointer active:scale-95 ${
+                        className={`relative aspect-square flex flex-col items-center justify-end rounded-xl border-2 overflow-hidden transition-all cursor-pointer active:scale-95 ${
                           isReturned
-                            ? 'opacity-40 bg-zinc-700 border-zinc-600 line-through'
+                            ? 'opacity-40 bg-white border-zinc-600'
                             : isLunarTheme
-                              ? 'bg-amber-900/40 border-amber-500 hover:border-amber-400'
-                              : 'bg-amber-900/30 border-[--color-gold] hover:border-amber-400'
+                              ? 'bg-white border-amber-700/50 hover:border-amber-500'
+                              : 'bg-white border-zinc-700 hover:border-zinc-500'
                         }`}
                         onClick={() => handleLiftCardClick(lc)}
                       >
-                        <span className={`text-2xl font-bold ${isLunarTheme ? 'text-amber-100' : 'text-zinc-100'}`}>{lc.number}</span>
-                        <span className={`text-xs mt-1 px-1 truncate max-w-full ${isLunarTheme ? 'text-amber-300/80' : 'text-zinc-400'}`}>
+                        <img src="/rfid_card.png" alt="Lift Card" className="absolute inset-0 w-full h-full object-contain p-1" />
+                        {isReturned && <div className="absolute inset-0 bg-zinc-700/60" />}
+                        <span className="relative z-10 text-lg font-bold text-white bg-black/60 rounded px-1.5 mb-0.5">{lc.number}</span>
+                        <span className={`relative z-10 text-xs px-1 truncate max-w-full mb-1 ${isLunarTheme ? 'text-amber-300/80' : 'text-zinc-700'}`}>
                           {getVolunteerName(lc.assignedTo)}
                         </span>
                       </button>
