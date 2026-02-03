@@ -119,6 +119,15 @@ router.post('/sign-out', (req, res) => {
   walkiesData.walkies[index].assignedTo = volunteerId;
   walkiesData.walkies[index].assignedAt = new Date().toISOString();
   db.saveWalkies(walkiesData);
+
+  // Log the sign-out
+  db.addAuditEntry({
+    action: 'sign-out',
+    itemType: 'walkie',
+    itemNumber: walkiesData.walkies[index].number,
+    volunteerId: volunteerId
+  });
+
   res.json(walkiesData.walkies[index]);
 });
 
@@ -130,6 +139,18 @@ router.post('/return/:id', (req, res) => {
   const index = data.walkies.findIndex(w => w.id === id);
   if (index === -1) {
     return res.status(404).json({ error: 'Walkie not found' });
+  }
+
+  const previousVolunteerId = data.walkies[index].assignedTo;
+
+  // Log the return before clearing
+  if (previousVolunteerId) {
+    db.addAuditEntry({
+      action: 'return',
+      itemType: 'walkie',
+      itemNumber: data.walkies[index].number,
+      volunteerId: previousVolunteerId
+    });
   }
 
   data.walkies[index].assignedTo = null;

@@ -1,0 +1,44 @@
+{
+  "liftCards": [
+    {
+      "id": "1b62ca61-b552-41eb-9a20-b0f851088577",
+      "number": 1,
+      "notes": "Test card",
+      "assignedTo": null,
+      "assignedAt": null,
+      "unusable": false
+    },
+    {
+      "id": "2a39ca53-59f2-4adf-b209-c97ff37f561f",
+      "number": 2,
+      "notes": "",
+      "assignedTo": null,
+      "assignedAt": null,
+      "unusable": false
+    },
+    {
+      "id": "9af8ad6d-f31b-4bd4-bf48-da8fb7720bf1",
+      "number": 3,
+      "notes": "",
+      "assignedTo": null,
+      "assignedAt": null,
+      "unusable": false
+    },
+    {
+      "id": "56deae87-7f51-4b25-8e14-6912b5310c68",
+      "number": 4,
+      "notes": "",
+      "assignedTo": null,
+      "assignedAt": null,
+      "unusable": false
+    },
+    {
+      "id": "26b9544b-debf-4243-8f00-103c2d782d6a",
+      "number": 5,
+      "notes": "",
+      "assignedTo": null,
+      "assignedAt": null,
+      "unusable": false
+    }
+  ]
+}

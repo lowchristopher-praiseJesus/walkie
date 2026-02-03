@@ -2,10 +2,10 @@ import { cn } from '../../lib/utils'
 
 const buttonVariants = {
   variant: {
-    default: 'bg-[--color-primary] text-white hover:bg-[--color-primary]/90',
-    secondary: 'bg-[--color-success] text-white hover:bg-[--color-success]/90',
-    destructive: 'bg-[--color-danger] text-white hover:bg-[--color-danger]/90',
-    outline: 'border-2 border-zinc-700 bg-transparent text-zinc-100 hover:bg-zinc-800',
+    default: 'bg-[--color-primary] text-white hover:bg-[--color-primary]/90 shadow-xl shadow-[--color-primary]/40 ring-2 ring-white/20 border border-white/30',
+    secondary: 'bg-[--color-success] text-white hover:bg-[--color-success]/90 shadow-xl shadow-[--color-success]/40 ring-2 ring-white/20 border border-white/30',
+    destructive: 'bg-[--color-danger] text-white hover:bg-[--color-danger]/90 shadow-xl shadow-[--color-danger]/40 ring-2 ring-white/20 border border-white/30',
+    outline: 'border-2 border-zinc-500 bg-transparent text-zinc-100 hover:bg-zinc-800 shadow-xl shadow-black/30',
     ghost: 'text-zinc-400 hover:text-zinc-100 hover:bg-zinc-800',
   },
   size: {

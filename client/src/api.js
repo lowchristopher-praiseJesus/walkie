@@ -33,8 +33,20 @@ export const api = {
   resetWalkies: () => fetchJSON('/walkies/reset', { method: 'POST' }),
   toggleUnusable: (id) => fetchJSON(`/walkies/${id}/toggle-unusable`, { method: 'POST' }),
 
+  // Lift Cards
+  getLiftCards: () => fetchJSON('/liftCards'),
+  addLiftCard: (data) => fetchJSON('/liftCards', { method: 'POST', body: JSON.stringify(data) }),
+  updateLiftCard: (id, data) => fetchJSON(`/liftCards/${id}`, { method: 'PUT', body: JSON.stringify(data) }),
+  deleteLiftCard: (id) => fetchJSON(`/liftCards/${id}`, { method: 'DELETE' }),
+  signOutLiftCard: (liftCardId, volunteerId) => fetchJSON('/liftCards/sign-out', { method: 'POST', body: JSON.stringify({ liftCardId, volunteerId }) }),
+  returnLiftCard: (id) => fetchJSON(`/liftCards/return/${id}`, { method: 'POST' }),
+  resetLiftCards: () => fetchJSON('/liftCards/reset', { method: 'POST' }),
+  toggleLiftCardUnusable: (id) => fetchJSON(`/liftCards/${id}/toggle-unusable`, { method: 'POST' }),
+
   // Admin
   verifyPin: (pin) => fetchJSON('/admin/verify', { method: 'POST', body: JSON.stringify({ pin }) }),
   getConfig: () => fetchJSON('/admin/config'),
   updateConfig: (data) => fetchJSON('/admin/config', { method: 'PUT', body: JSON.stringify(data) }),
+  getAuditLog: () => fetchJSON('/admin/audit-log'),
+  clearAuditLog: () => fetchJSON('/admin/audit-log', { method: 'DELETE' }),
 };

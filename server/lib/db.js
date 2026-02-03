@@ -22,6 +22,19 @@ module.exports = {
   saveVolunteers: (data) => writeJSON('volunteers.json', data),
   getWalkies: () => readJSON('walkies.json'),
   saveWalkies: (data) => writeJSON('walkies.json', data),
+  getLiftCards: () => readJSON('liftCards.json'),
+  saveLiftCards: (data) => writeJSON('liftCards.json', data),
   getConfig: () => readJSON('config.json'),
   saveConfig: (data) => writeJSON('config.json', data),
+  getAuditLog: () => readJSON('auditLog.json') || { entries: [] },
+  saveAuditLog: (data) => writeJSON('auditLog.json', data),
+  addAuditEntry: (entry) => {
+    const log = readJSON('auditLog.json') || { entries: [] };
+    log.entries.push({
+      ...entry,
+      id: require('uuid').v4(),
+      timestamp: new Date().toISOString()
+    });
+    writeJSON('auditLog.json', log);
+  },
 };

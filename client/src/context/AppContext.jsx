@@ -6,19 +6,22 @@ const AppContext = createContext();
 export function AppProvider({ children }) {
   const [volunteers, setVolunteers] = useState([]);
   const [walkies, setWalkies] = useState([]);
+  const [liftCards, setLiftCards] = useState([]);
   const [config, setConfig] = useState({ eventName: 'Event' });
   const [isAdmin, setIsAdmin] = useState(false);
   const [loading, setLoading] = useState(true);
 
   const refresh = async () => {
     try {
-      const [vols, walks, cfg] = await Promise.all([
+      const [vols, walks, lifts, cfg] = await Promise.all([
         api.getVolunteers(),
         api.getWalkies(),
+        api.getLiftCards(),
         api.getConfig(),
       ]);
       setVolunteers(vols);
       setWalkies(walks);
+      setLiftCards(lifts);
       setConfig(cfg);
     } catch (err) {
       console.error('Failed to load data:', err);
@@ -34,6 +37,7 @@ export function AppProvider({ children }) {
   const value = {
     volunteers,
     walkies,
+    liftCards,
     config,
     isAdmin,
     setIsAdmin,

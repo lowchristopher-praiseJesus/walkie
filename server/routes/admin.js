@@ -37,4 +37,30 @@ router.put('/config', (req, res) => {
   res.json({ eventName: config.eventName });
 });
 
+// GET audit log
+router.get('/audit-log', (req, res) => {
+  const log = db.getAuditLog();
+  const volunteers = db.getVolunteers();
+
+  // Enrich entries with volunteer names
+  const enrichedEntries = log.entries.map(entry => {
+    const volunteer = volunteers.volunteers.find(v => v.id === entry.volunteerId);
+    return {
+      ...entry,
+      volunteerName: volunteer ? `${volunteer.firstName} ${volunteer.lastName}`.trim() : 'Unknown'
+    };
+  });
+
+  // Sort by timestamp descending (most recent first)
+  enrichedEntries.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+
+  res.json(enrichedEntries);
+});
+
+// DELETE clear audit log
+router.delete('/audit-log', (req, res) => {
+  db.saveAuditLog({ entries: [] });
+  res.json({ message: 'Audit log cleared' });
+});
+
 module.exports = router;

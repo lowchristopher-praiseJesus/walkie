@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useApp } from '../context/AppContext';
 import { api } from '../api';
@@ -19,6 +19,26 @@ function Admin() {
   const [editingWalkie, setEditingWalkie] = useState(null);
   const [editingLiftCard, setEditingLiftCard] = useState(null);
   const [eventName, setEventName] = useState(config.eventName);
+  const [auditLog, setAuditLog] = useState([]);
+  const [loadingLog, setLoadingLog] = useState(false);
+
+  const fetchAuditLog = async () => {
+    setLoadingLog(true);
+    try {
+      const log = await api.getAuditLog();
+      setAuditLog(log);
+    } catch (err) {
+      console.error('Failed to fetch audit log:', err);
+    } finally {
+      setLoadingLog(false);
+    }
+  };
+
+  useEffect(() => {
+    if (isAdmin && activeTab === 'log') {
+      fetchAuditLog();
+    }
+  }, [isAdmin, activeTab]);
 
   const handlePinSubmit = async (e) => {
     e.preventDefault();
@@ -193,6 +213,28 @@ function Admin() {
     }
   };
 
+  const handleClearAuditLog = async () => {
+    if (!confirm('Clear all audit log entries? This cannot be undone.')) return;
+    try {
+      await api.clearAuditLog();
+      setAuditLog([]);
+      showMessage('success', 'Audit log cleared');
+    } catch (err) {
+      showMessage('error', err.message);
+    }
+  };
+
+  const formatTimestamp = (timestamp) => {
+    const date = new Date(timestamp);
+    return date.toLocaleString('en-US', {
+      month: 'short',
+      day: 'numeric',
+      hour: 'numeric',
+      minute: '2-digit',
+      hour12: true
+    });
+  };
+
   // PIN screen
   if (!isAdmin) {
     return (
@@ -252,6 +294,9 @@ function Admin() {
             </TabsTrigger>
             <TabsTrigger active={activeTab === 'settings'} onClick={() => setActiveTab('settings')}>
               Settings
+            </TabsTrigger>
+            <TabsTrigger active={activeTab === 'log'} onClick={() => setActiveTab('log')}>
+              Log
             </TabsTrigger>
           </TabsList>
 
@@ -586,6 +631,47 @@ function Admin() {
                   </p>
                 </CardContent>
               </Card>
+            </div>
+          )}
+
+          {/* Log Tab */}
+          {activeTab === 'log' && (
+            <div>
+              <div className="flex justify-between items-center mb-4">
+                <h3 className="text-zinc-400 text-sm font-medium">
+                  Activity Log ({auditLog.length} entries)
+                </h3>
+                {auditLog.length > 0 && (
+                  <Button size="sm" variant="destructive" onClick={handleClearAuditLog}>
+                    Clear Log
+                  </Button>
+                )}
+              </div>
+
+              {loadingLog ? (
+                <div className="text-center py-8 text-zinc-500">Loading...</div>
+              ) : auditLog.length === 0 ? (
+                <div className="text-center py-8 text-zinc-500">No activity recorded yet</div>
+              ) : (
+                <div className="space-y-2">
+                  {auditLog.map(entry => (
+                    <div key={entry.id} className="p-3 bg-zinc-800 rounded-lg">
+                      <div className="flex items-center gap-2 mb-1">
+                        <Badge variant={entry.action === 'sign-out' ? 'warning' : 'success'}>
+                          {entry.action === 'sign-out' ? 'Collected' : 'Returned'}
+                        </Badge>
+                        <span className="text-zinc-100 font-medium">
+                          {entry.itemType === 'walkie' ? 'Walkie' : 'Lift Card'} #{entry.itemNumber}
+                        </span>
+                      </div>
+                      <div className="flex justify-between text-sm">
+                        <span className="text-zinc-400">{entry.volunteerName}</span>
+                        <span className="text-zinc-500">{formatTimestamp(entry.timestamp)}</span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
           )}
         </Tabs>

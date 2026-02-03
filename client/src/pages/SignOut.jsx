@@ -4,7 +4,6 @@ import { useApp } from '../context/AppContext';
 import { api } from '../api';
 import { Button, Alert, Badge } from '../components/ui';
 
-const LETTERS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
 const MAX_WALKIES = 2;
 const MAX_LIFT_CARDS = 2;
 
@@ -18,6 +17,13 @@ function SignOut() {
   const [selectedLiftCards, setSelectedLiftCards] = useState([]);
   const [message, setMessage] = useState(null);
   const [submitting, setSubmitting] = useState(false);
+
+  // Get only letters that have volunteers
+  const availableLetters = [...new Set(
+    volunteers
+      .map(v => v.firstName.charAt(0).toUpperCase())
+      .filter(letter => letter >= 'A' && letter <= 'Z')
+  )].sort();
 
   const filteredVolunteers = selectedLetter
     ? volunteers.filter(v => v.firstName.toUpperCase().startsWith(selectedLetter))
@@ -106,7 +112,7 @@ function SignOut() {
           </Link>
           <h2 className="text-zinc-400 text-base mb-4">Type the first letter of your name</h2>
           <div className="grid grid-cols-6 gap-2">
-            {LETTERS.map(letter => (
+            {availableLetters.map(letter => (
               <button
                 key={letter}
                 className="aspect-square flex items-center justify-center text-lg font-semibold bg-zinc-800 border-2 border-zinc-700 rounded-lg text-zinc-100 hover:bg-zinc-700 active:bg-[--color-primary] active:border-[--color-primary] transition-colors"
@@ -210,7 +216,7 @@ function SignOut() {
                   key={w.id}
                   className={`aspect-square flex flex-col items-center justify-center rounded-xl border-2 text-2xl font-bold transition-all ${
                     isSelected
-                      ? 'bg-[--color-success] border-[--color-success] text-white'
+                      ? 'bg-red-600 border-red-500 text-white shadow-lg shadow-red-600/50 ring-2 ring-red-400'
                       : 'bg-zinc-800 border-zinc-700 text-zinc-100 hover:border-zinc-500'
                   } ${isDisabled ? 'opacity-40 cursor-not-allowed' : 'cursor-pointer active:scale-95'}`}
                   onClick={() => !isDisabled && toggleWalkie(w)}
@@ -244,7 +250,7 @@ function SignOut() {
                   key={lc.id}
                   className={`aspect-square flex flex-col items-center justify-center rounded-xl border-2 text-2xl font-bold transition-all ${
                     isSelected
-                      ? 'bg-[--color-success] border-[--color-success] text-white'
+                      ? 'bg-red-600 border-red-500 text-white shadow-lg shadow-red-600/50 ring-2 ring-red-400'
                       : 'bg-zinc-800 border-zinc-700 text-zinc-100 hover:border-zinc-500'
                   } ${isDisabled ? 'opacity-40 cursor-not-allowed' : 'cursor-pointer active:scale-95'}`}
                   onClick={() => !isDisabled && toggleLiftCard(lc)}
