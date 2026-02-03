@@ -46,13 +46,13 @@ function Home() {
 
         <div className="space-y-4">
           <Link to="/sign-out" className="block">
-            <Button variant="default" size="lg" className="w-full">
+            <Button variant="default" size="lg" className="w-full" style={!isLunarTheme ? { color: '#c9a84c' } : undefined}>
               Collect Walkie / Lift Card
             </Button>
           </Link>
 
           <Link to="/return" className="block">
-            <Button variant="secondary" size="lg" className="w-full">
+            <Button variant="secondary" size="lg" className="w-full" style={!isLunarTheme ? { color: '#c9a84c' } : undefined}>
               Return Walkie / Lift Card
             </Button>
           </Link>
