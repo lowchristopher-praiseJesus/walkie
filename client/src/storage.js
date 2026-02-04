@@ -339,4 +339,65 @@ export const storage = {
   clearAuditLog() {
     write(KEYS.auditLog, []);
   },
+
+  exportAllData() {
+    const data = {
+      version: 1,
+      exportedAt: new Date().toISOString(),
+      volunteers: read(KEYS.volunteers) || [],
+      walkies: read(KEYS.walkies) || [],
+      liftCards: read(KEYS.liftCards) || [],
+      config: read(KEYS.config) || {},
+      auditLog: read(KEYS.auditLog) || [],
+    };
+    return 'WALKIE:' + btoa(unescape(encodeURIComponent(JSON.stringify(data))));
+  },
+
+  parseImportData(encoded) {
+    if (!encoded || typeof encoded !== 'string') {
+      return { success: false, error: 'No data provided' };
+    }
+
+    const trimmed = encoded.trim();
+    if (!trimmed.startsWith('WALKIE:')) {
+      return { success: false, error: 'Invalid format. Data must start with WALKIE:' };
+    }
+
+    let data;
+    try {
+      const json = decodeURIComponent(escape(atob(trimmed.slice(7))));
+      data = JSON.parse(json);
+    } catch {
+      return { success: false, error: 'Data is corrupted or invalid' };
+    }
+
+    if (!data.version || !Array.isArray(data.volunteers) || !Array.isArray(data.walkies) ||
+        !Array.isArray(data.liftCards) || !data.config || !Array.isArray(data.auditLog)) {
+      return { success: false, error: 'Data is missing required fields' };
+    }
+
+    return {
+      success: true,
+      data,
+      summary: {
+        volunteers: data.volunteers.length,
+        walkies: data.walkies.length,
+        liftCards: data.liftCards.length,
+        auditLog: data.auditLog.length,
+      },
+    };
+  },
+
+  importAllData(encoded) {
+    const result = this.parseImportData(encoded);
+    if (!result.success) return result;
+
+    write(KEYS.volunteers, result.data.volunteers);
+    write(KEYS.walkies, result.data.walkies);
+    write(KEYS.liftCards, result.data.liftCards);
+    write(KEYS.config, result.data.config);
+    write(KEYS.auditLog, result.data.auditLog);
+
+    return { success: true, summary: result.summary };
+  },
 };

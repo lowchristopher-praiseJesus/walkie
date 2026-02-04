@@ -22,6 +22,7 @@ function Admin() {
   const [editingLiftCard, setEditingLiftCard] = useState(null);
   const [eventName, setEventName] = useState(config.eventName);
   const [auditLog, setAuditLog] = useState([]);
+  const [importText, setImportText] = useState('');
 
   const fetchAuditLog = () => {
     setAuditLog(storage.getAuditLog());
@@ -295,6 +296,9 @@ function Admin() {
             </TabsTrigger>
             <TabsTrigger active={activeTab === 'settings'} onClick={() => setActiveTab('settings')}>
               Settings
+            </TabsTrigger>
+            <TabsTrigger active={activeTab === 'data'} onClick={() => setActiveTab('data')}>
+              Data
             </TabsTrigger>
             <TabsTrigger active={activeTab === 'log'} onClick={() => setActiveTab('log')}>
               Log
@@ -670,6 +674,73 @@ function Admin() {
                   <p className="text-xs text-zinc-500 mt-2">
                     This clears all sign-outs for walkies and lift cards for a new event.
                   </p>
+                </CardContent>
+              </Card>
+            </div>
+          )}
+
+          {/* Data Tab */}
+          {activeTab === 'data' && (
+            <div className="space-y-6">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Export Data</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-sm text-zinc-400 mb-4">
+                    Copy your current state to share with another device via WhatsApp or Telegram.
+                  </p>
+                  <Button className="w-full" onClick={() => {
+                    try {
+                      const encoded = storage.exportAllData();
+                      navigator.clipboard.writeText(encoded).then(() => {
+                        showMessage('success', 'Copied to clipboard! Paste into WhatsApp or Telegram to share.');
+                      }).catch(() => {
+                        showMessage('error', 'Failed to copy. Try again.');
+                      });
+                    } catch (err) {
+                      showMessage('error', err.message);
+                    }
+                  }}>
+                    Copy to Clipboard
+                  </Button>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader>
+                  <CardTitle>Import Data</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-sm text-zinc-400 mb-4">
+                    Paste exported data from another device. This will replace all current data.
+                  </p>
+                  <textarea
+                    className="w-full h-32 p-3 rounded-lg bg-zinc-800 border border-zinc-700 text-zinc-100 text-sm font-mono resize-none focus:outline-none focus:border-[--color-primary] placeholder-zinc-500"
+                    placeholder="Paste WALKIE:... data here"
+                    value={importText}
+                    onChange={(e) => setImportText(e.target.value)}
+                  />
+                  <Button className="w-full mt-4" disabled={!importText.trim()} onClick={() => {
+                    const preview = storage.parseImportData(importText);
+                    if (!preview.success) {
+                      showMessage('error', preview.error);
+                      return;
+                    }
+                    const s = preview.summary;
+                    const msg = `This will replace ALL current data with:\n• ${s.volunteers} servers\n• ${s.walkies} walkies\n• ${s.liftCards} lift cards\n• ${s.auditLog} log entries\n\nContinue?`;
+                    if (!confirm(msg)) return;
+                    const result = storage.importAllData(importText);
+                    if (result.success) {
+                      setImportText('');
+                      refresh();
+                      showMessage('success', `Imported: ${result.summary.volunteers} servers, ${result.summary.walkies} walkies, ${result.summary.liftCards} lift cards`);
+                    } else {
+                      showMessage('error', result.error);
+                    }
+                  }}>
+                    Import
+                  </Button>
                 </CardContent>
               </Card>
             </div>
