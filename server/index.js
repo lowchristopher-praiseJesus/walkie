@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
@@ -5,7 +6,7 @@ const cookieParser = require('cookie-parser');
 const app = express();
 const PORT = process.env.PORT || 3001;
 const COOKIE_SECRET = process.env.COOKIE_SECRET || 'walkie-dev-secret';
-const SITE_PASSWORD = '14@star';
+const SITE_PASSWORD = process.env.SITE_PASSWORD || 'changeme';
 
 app.use(cookieParser(COOKIE_SECRET));
 app.use(express.urlencoded({ extended: false }));

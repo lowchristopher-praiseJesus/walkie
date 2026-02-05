@@ -2,14 +2,12 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useApp } from '../context/AppContext';
 import { storage } from '../storage';
-import { Button, Input, PinInput, Card, CardHeader, CardTitle, CardContent, Tabs, TabsList, TabsTrigger, Alert, Badge } from '../components/ui';
+import { Button, Input, Card, CardHeader, CardTitle, CardContent, Tabs, TabsList, TabsTrigger, Alert, Badge } from '../components/ui';
 import PageWrapper from '../components/PageWrapper';
 
 function Admin() {
-  const { volunteers, walkies, liftCards, config, isAdmin, setIsAdmin, refresh } = useApp();
+  const { volunteers, walkies, liftCards, config, setIsAdmin, refresh } = useApp();
   const isLunarTheme = config.theme === 'lunar';
-  const [pin, setPin] = useState('');
-  const [pinError, setPinError] = useState(false);
   const [activeTab, setActiveTab] = useState('volunteers');
   const [message, setMessage] = useState(null);
 
@@ -29,21 +27,14 @@ function Admin() {
   };
 
   useEffect(() => {
-    if (isAdmin && activeTab === 'log') {
+    setIsAdmin(true);
+  }, [setIsAdmin]);
+
+  useEffect(() => {
+    if (activeTab === 'log') {
       fetchAuditLog();
     }
-  }, [isAdmin, activeTab]);
-
-  const handlePinSubmit = (e) => {
-    e.preventDefault();
-    try {
-      storage.verifyPin(pin);
-      setIsAdmin(true);
-      setPinError(false);
-    } catch {
-      setPinError(true);
-    }
-  };
+  }, [activeTab]);
 
   const showMessage = (type, text) => {
     setMessage({ type, text });
@@ -236,32 +227,6 @@ function Admin() {
       hour12: true
     });
   };
-
-  // PIN screen
-  if (!isAdmin) {
-    return (
-      <PageWrapper centered>
-        <div className="max-w-md mx-auto w-full px-4 py-6">
-          <Link to="/" className={`hover:underline text-base mb-4 inline-block ${isLunarTheme ? 'text-amber-300' : 'text-[--color-primary]'}`}>
-            &larr; Back
-          </Link>
-          <header className="text-center py-6 mb-8">
-            <h1 className={`text-2xl font-bold ${isLunarTheme ? 'text-amber-100' : 'text-zinc-100'}`}>Admin Access</h1>
-          </header>
-          <form onSubmit={handlePinSubmit} className="space-y-4">
-            <PinInput
-              placeholder="PIN"
-              value={pin}
-              onChange={(e) => setPin(e.target.value)}
-              autoFocus
-            />
-            {pinError && <Alert variant="error">Invalid PIN</Alert>}
-            <Button type="submit" className="w-full">Enter</Button>
-          </form>
-        </div>
-      </PageWrapper>
-    );
-  }
 
   const sortedVolunteers = [...volunteers].sort((a, b) =>
     a.lastName.localeCompare(b.lastName)

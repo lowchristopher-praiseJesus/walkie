@@ -302,12 +302,6 @@ export const storage = {
   },
 
   // Admin
-  verifyPin(pin) {
-    const config = read(KEYS.config) || {};
-    if (pin !== config.adminPin) throw new Error('Invalid PIN');
-    return { valid: true };
-  },
-
   getConfig() {
     const config = read(KEYS.config) || {};
     return { eventName: config.eventName, theme: config.theme || 'default' };
@@ -316,7 +310,6 @@ export const storage = {
   updateConfig(data) {
     const config = read(KEYS.config) || {};
     if (data.eventName !== undefined) config.eventName = data.eventName;
-    if (data.adminPin !== undefined) config.adminPin = data.adminPin;
     if (data.theme !== undefined) config.theme = data.theme;
     write(KEYS.config, config);
     return { eventName: config.eventName, theme: config.theme || 'default' };
