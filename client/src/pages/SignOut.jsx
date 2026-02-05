@@ -102,7 +102,7 @@ function SignOut() {
 
       setMessage({ type: 'success', text: `${results.join(', ')} signed out to ${selectedVolunteer.firstName}` });
       refresh();
-      setTimeout(() => navigate('/'), 1500);
+      setTimeout(() => navigate('/'), 500);
     } catch (err) {
       setMessage({ type: 'error', text: err.message });
       setSubmitting(false);
