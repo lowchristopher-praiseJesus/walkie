@@ -12,7 +12,7 @@ export function TabsList({ className, children, ...props }) {
   return (
     <div
       className={cn(
-        'flex rounded-lg bg-zinc-800 p-1 mb-6',
+        'flex overflow-x-auto rounded-lg bg-zinc-800 p-1 mb-6',
         className
       )}
       {...props}
@@ -26,7 +26,7 @@ export function TabsTrigger({ className, active, children, ...props }) {
   return (
     <button
       className={cn(
-        'flex-1 rounded-md px-3 py-2.5 text-sm font-medium transition-all',
+        'flex-shrink-0 rounded-md px-3 py-2.5 text-sm font-medium transition-all whitespace-nowrap',
         active
           ? 'bg-zinc-900 text-zinc-100 shadow-sm'
           : 'text-zinc-400 hover:text-zinc-100',
