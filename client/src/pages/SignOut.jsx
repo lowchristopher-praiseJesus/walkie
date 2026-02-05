@@ -62,12 +62,12 @@ function SignOut() {
       setSelectedWalkies(selectedWalkies.filter(w => w.id !== walkie.id));
     } else if (selectedWalkies.length < MAX_WALKIES) {
       setSelectedWalkies([...selectedWalkies, walkie]);
-      // Scroll to lift cards section after 1 second on mobile
+      // Scroll to lift cards section after brief delay for visual feedback
       setTimeout(() => {
         if (liftCardsSectionRef.current) {
           liftCardsSectionRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
-      }, 1000);
+      }, 300);
     }
   };
 
