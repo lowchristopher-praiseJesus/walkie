@@ -68,19 +68,19 @@ export function PinInput({ className, value = '', onChange, ...props }) {
 
   const handleChange = (e) => {
     const inputValue = e.target.value;
+    const displayValue = getDisplayValue();
 
-    // Extract only new digits from input
-    // The input contains asterisks + possibly new digit(s)
-    const newChars = inputValue.replace(/\*/g, '').replace(/[^0-9]/g, '');
-
-    if (inputValue.length < value.length) {
+    if (inputValue.length < displayValue.length) {
       // User deleted - remove last character from actual value
       const newValue = value.slice(0, -1);
       onChange?.({ target: { value: newValue } });
-    } else if (newChars.length > 0) {
-      // User added digit(s)
-      const newValue = (value + newChars).slice(0, 4);
-      onChange?.({ target: { value: newValue } });
+    } else if (inputValue.length > displayValue.length) {
+      // User added digit(s) - extract only the truly new characters
+      const addedChars = inputValue.slice(displayValue.length).replace(/[^0-9]/g, '');
+      if (addedChars.length > 0) {
+        const newValue = (value + addedChars).slice(0, 4);
+        onChange?.({ target: { value: newValue } });
+      }
     }
   };
 
