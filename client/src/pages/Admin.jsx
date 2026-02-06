@@ -730,18 +730,18 @@ function Admin() {
               ) : (
                 <div className="space-y-2">
                   {auditLog.map(entry => (
-                    <div key={entry.id} className="p-3 bg-zinc-800 rounded-lg">
+                    <div key={entry.id} className={`p-3 bg-zinc-800 rounded-lg ${entry.action === 'sign-out' ? 'text-green-400' : 'text-red-400'}`}>
                       <div className="flex items-center gap-2 mb-1">
                         <Badge variant={entry.action === 'sign-out' ? 'warning' : 'success'}>
                           {entry.action === 'sign-out' ? 'Collected' : 'Returned'}
                         </Badge>
-                        <span className="text-zinc-100 font-medium">
+                        <span className="font-medium">
                           {entry.itemType === 'walkie' ? 'Walkie' : 'Lift Card'} #{entry.itemNumber}
                         </span>
                       </div>
                       <div className="flex justify-between text-sm">
-                        <span className="text-zinc-400">{entry.volunteerName}</span>
-                        <span className="text-zinc-500">{formatTimestamp(entry.timestamp)}</span>
+                        <span>{entry.volunteerName}</span>
+                        <span className="opacity-70">{formatTimestamp(entry.timestamp)}</span>
                       </div>
                     </div>
                   ))}
