@@ -62,7 +62,7 @@
     { "id": "26b9544b-debf-4243-8f00-103c2d782d6a", "number": 5, "notes": "", "assignedTo": null, "assignedAt": null, "unusable": false }
   ],
   "config": {
-    "eventName": "14@Star ( 15 Feb 2026 )",
+    "eventName": "14@Star",
     "theme": "default"
   },
   "auditLog": []
