@@ -39,7 +39,10 @@ function Home() {
           <h1 className={`text-3xl font-bold ${isLunarTheme ? 'text-amber-100 drop-shadow-lg' : 'text-zinc-100'}`}>
             {config.eventName}
           </h1>
-          <p className={`mt-2 ${isLunarTheme ? 'text-amber-200/90' : 'text-zinc-400'}`}>
+          <p className={`text-3xl font-semibold mt-1 ${isLunarTheme ? 'text-amber-100 drop-shadow-lg' : 'text-zinc-100'}`}>
+            {new Date().toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' })}
+          </p>
+          <p className={`mt-2 ${isLunarTheme ? 'text-amber-100 drop-shadow-lg' : 'text-zinc-100'}`}>
             {walkiesInUse} {walkiesInUse === 1 ? 'walkie' : 'walkies'}, {liftCardsInUse} {liftCardsInUse === 1 ? 'lift card' : 'lift cards'} issued
           </p>
         </header>
