@@ -685,6 +685,10 @@ function Admin() {
                     placeholder="Paste WALKIE:... data here"
                     value={importText}
                     onChange={(e) => setImportText(e.target.value)}
+                    autoCapitalize="off"
+                    autoCorrect="off"
+                    autoComplete="off"
+                    spellCheck={false}
                   />
                   <Button className="w-full mt-4" disabled={!importText.trim()} onClick={() => {
                     const preview = storage.parseImportData(importText);

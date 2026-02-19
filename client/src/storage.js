@@ -352,7 +352,7 @@ export const storage = {
     }
 
     const trimmed = encoded.trim();
-    if (!trimmed.startsWith('WALKIE:')) {
+    if (!trimmed.toUpperCase().startsWith('WALKIE:')) {
       return { success: false, error: 'Invalid format. Data must start with WALKIE:' };
     }
 
