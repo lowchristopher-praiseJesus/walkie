@@ -1,7 +1,10 @@
 import { createContext, useContext, useState, useEffect } from 'react';
 import { storage, initializeStorage } from '../storage';
+import { StaleDataModal } from '../components/StaleDataModal';
 
 initializeStorage();
+
+const STALE_THRESHOLD_MS = 24 * 60 * 60 * 1000; // 24 hours
 
 const AppContext = createContext();
 
@@ -12,6 +15,8 @@ export function AppProvider({ children }) {
   const [config, setConfig] = useState(() => storage.getConfig());
   const [isAdmin, setIsAdmin] = useState(false);
   const [loading] = useState(false);
+  const [showStaleModal, setShowStaleModal] = useState(false);
+  const [staleTimestamp, setStaleTimestamp] = useState(null);
 
   // Apply theme to document
   useEffect(() => {
@@ -22,11 +27,32 @@ export function AppProvider({ children }) {
     }
   }, [config.theme]);
 
+  // Check for stale data on mount
+  useEffect(() => {
+    const ts = storage.getDataTimestamp();
+    const ageMs = Date.now() - new Date(ts).getTime();
+    if (ageMs > STALE_THRESHOLD_MS) {
+      setStaleTimestamp(ts);
+      setShowStaleModal(true);
+    }
+  }, []);
+
   const refresh = () => {
     setVolunteers(storage.getVolunteers());
     setWalkies(storage.getWalkies());
     setLiftCards(storage.getLiftCards());
     setConfig(storage.getConfig());
+  };
+
+  const handleKeepData = () => {
+    storage.refreshDataTimestamp();
+    setShowStaleModal(false);
+  };
+
+  const handleClearEventData = () => {
+    storage.clearEventData();
+    refresh();
+    setShowStaleModal(false);
   };
 
   const value = {
@@ -40,7 +66,18 @@ export function AppProvider({ children }) {
     refresh,
   };
 
-  return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
+  return (
+    <AppContext.Provider value={value}>
+      {children}
+      {showStaleModal && (
+        <StaleDataModal
+          timestamp={staleTimestamp}
+          onKeep={handleKeepData}
+          onClear={handleClearEventData}
+        />
+      )}
+    </AppContext.Provider>
+  );
 }
 
 export function useApp() {

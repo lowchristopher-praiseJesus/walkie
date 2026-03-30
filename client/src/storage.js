@@ -14,6 +14,7 @@ const KEYS = {
   config: 'walkie:config',
   auditLog: 'walkie:auditLog',
   initialized: 'walkie:initialized',
+  dataTimestamp: 'walkie:dataTimestamp',
 };
 
 function read(key) {
@@ -32,6 +33,7 @@ export function initializeStorage() {
   write(KEYS.liftCards, seedData.liftCards);
   write(KEYS.config, seedData.config);
   write(KEYS.auditLog, seedData.auditLog);
+  localStorage.setItem(KEYS.dataTimestamp, new Date().toISOString());
   localStorage.setItem(KEYS.initialized, '1');
 }
 
@@ -392,5 +394,32 @@ export const storage = {
     write(KEYS.auditLog, result.data.auditLog);
 
     return { success: true, summary: result.summary };
+  },
+
+  getDataTimestamp() {
+    const stored = localStorage.getItem(KEYS.dataTimestamp);
+    if (stored) return stored;
+    // Existing installation with no timestamp yet — infer from oldest audit entry
+    const log = read(KEYS.auditLog) || [];
+    if (log.length > 0) {
+      const oldest = log.reduce((a, b) =>
+        new Date(a.timestamp) < new Date(b.timestamp) ? a : b
+      );
+      return oldest.timestamp;
+    }
+    // No activity recorded — treat as brand new
+    return new Date().toISOString();
+  },
+
+  refreshDataTimestamp() {
+    localStorage.setItem(KEYS.dataTimestamp, new Date().toISOString());
+  },
+
+  clearEventData() {
+    this.resetWalkies();
+    this.resetLiftCards();
+    this.clearAuditLog();
+    sessionStorage.removeItem('returnPageState');
+    localStorage.setItem(KEYS.dataTimestamp, new Date().toISOString());
   },
 };
