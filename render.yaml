@@ -10,3 +10,5 @@ services:
         value: production
       - key: COOKIE_SECRET
         generateValue: true
+      - key: VITE_WORKER_URL
+        value: https://songbook-worker.low-christopher.workers.dev

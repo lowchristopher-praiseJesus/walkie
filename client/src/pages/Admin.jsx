@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useApp } from '../context/AppContext';
 import { storage } from '../storage';
+import { uploadServerConfig } from '../lib/serverApi';
 import { Button, Input, Card, CardHeader, CardTitle, CardContent, Tabs, TabsList, TabsTrigger, Alert, Badge } from '../components/ui';
 import PageWrapper from '../components/PageWrapper';
 
@@ -21,6 +22,9 @@ function Admin() {
   const [eventName, setEventName] = useState(config.eventName);
   const [auditLog, setAuditLog] = useState([]);
   const [importText, setImportText] = useState('');
+  const [publishLoading, setPublishLoading] = useState(false);
+  const [publishedUrl, setPublishedUrl] = useState(null);
+  const [copyLabel, setCopyLabel] = useState('Copy');
 
   const fetchAuditLog = () => {
     setAuditLog(storage.getAuditLog());
@@ -217,6 +221,26 @@ function Admin() {
     }
   };
 
+  const handlePublishServerList = async () => {
+    setPublishLoading(true);
+    setPublishedUrl(null);
+    try {
+      const { shareUrl } = await uploadServerConfig(volunteers);
+      setPublishedUrl(shareUrl);
+    } catch {
+      showMessage('error', 'Failed to publish server list. Check worker configuration.');
+    } finally {
+      setPublishLoading(false);
+    }
+  };
+
+  const handleCopyUrl = () => {
+    navigator.clipboard.writeText(publishedUrl).then(() => {
+      setCopyLabel('Copied!');
+      setTimeout(() => setCopyLabel('Copy'), 2000);
+    });
+  };
+
   const formatTimestamp = (timestamp) => {
     const date = new Date(timestamp);
     return date.toLocaleString('en-US', {
@@ -363,6 +387,33 @@ function Admin() {
                         </div>
                       </div>
                     ))}
+                  </div>
+
+                  <div className="mt-6">
+                    <Button
+                      variant="outline"
+                      className="w-full"
+                      onClick={handlePublishServerList}
+                      disabled={publishLoading}
+                    >
+                      {publishLoading ? 'Publishing…' : 'Publish Server List'}
+                    </Button>
+                    {publishedUrl && (
+                      <div className="mt-3 p-3 bg-zinc-800 rounded-lg">
+                        <p className="text-zinc-400 text-xs mb-2">Share this link to load this server list:</p>
+                        <div className="flex gap-2 items-center">
+                          <input
+                            readOnly
+                            value={publishedUrl}
+                            className="flex-1 bg-zinc-900 text-zinc-100 text-xs px-2 py-1.5 rounded border border-zinc-700 min-w-0"
+                            onFocus={e => e.target.select()}
+                          />
+                          <Button size="sm" variant="outline" onClick={handleCopyUrl}>
+                            {copyLabel}
+                          </Button>
+                        </div>
+                      </div>
+                    )}
                   </div>
                 </>
               )}

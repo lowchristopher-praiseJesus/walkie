@@ -415,6 +415,10 @@ export const storage = {
     localStorage.setItem(KEYS.dataTimestamp, new Date().toISOString());
   },
 
+  importVolunteers(volunteers) {
+    write(KEYS.volunteers, volunteers);
+  },
+
   clearEventData() {
     this.resetWalkies();
     this.resetLiftCards();
