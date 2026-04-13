@@ -81,17 +81,13 @@
       gap: 12px;
     }
 
-    .sb-logo {
-      width: 36px; height: 36px;
-      background: var(--gold);
-      border-radius: 9px;
-      display: flex; align-items: center; justify-content: center;
+    .sb-logo-img {
+      width: 44px; height: 44px;
+      object-fit: contain;
       flex-shrink: 0;
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 15px;
-      font-weight: 700;
-      color: #1a1000;
-      letter-spacing: 0.05em;
+      border-radius: 8px;
+      mix-blend-mode: luminosity;
+      opacity: 0.9;
     }
 
     .sb-brand-text {}
@@ -704,7 +700,7 @@
 <nav class="sidebar" id="sidebar" aria-label="Guide navigation">
 
   <div class="sb-brand">
-    <div class="sb-logo">WT</div>
+    <img src="images/Logo.png" alt="App logo" class="sb-logo-img" />
     <div class="sb-brand-text">
       <div class="sb-brand-name">Walkie Tracker</div>
       <div class="sb-brand-sub">User Guide</div>
@@ -783,6 +779,10 @@
        SECTION 1 — OVERVIEW
   ─────────────────────────────────────── -->
   <section class="section" id="overview">
+
+    <div style="margin-bottom: 28px;">
+      <img src="images/Logo.png" alt="App logo" style="width: 88px; height: 88px; object-fit: contain; display: block;" />
+    </div>
 
     <div class="s-eyebrow">
       <span class="s-num">Section 01</span>
