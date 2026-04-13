@@ -33,6 +33,7 @@ export function AppProvider({ children }) {
         if (walkies) storage.importWalkies(walkies);
         if (liftCards) storage.importLiftCards(liftCards);
         if (eventName) storage.importEventName(eventName);
+        storage.setPublishedUrl(window.location.href);
         setVolunteers(storage.getVolunteers());
         setWalkies(storage.getWalkies());
         setLiftCards(storage.getLiftCards());
