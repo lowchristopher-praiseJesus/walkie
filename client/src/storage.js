@@ -13,6 +13,7 @@ const KEYS = {
   auditLog: 'walkie:auditLog',
   initialized: 'walkie:initialized',
   dataTimestamp: 'walkie:dataTimestamp',
+  publishedUrl: 'walkie:publishedUrl',
 };
 
 function read(key) {
@@ -429,6 +430,14 @@ export const storage = {
     const config = read(KEYS.config) || {};
     config.eventName = eventName;
     write(KEYS.config, config);
+  },
+
+  getPublishedUrl() {
+    return localStorage.getItem(KEYS.publishedUrl) || null;
+  },
+
+  setPublishedUrl(url) {
+    localStorage.setItem(KEYS.publishedUrl, url);
   },
 
   clearEventData() {

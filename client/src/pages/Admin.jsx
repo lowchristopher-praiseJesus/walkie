@@ -23,7 +23,7 @@ function Admin() {
   const [auditLog, setAuditLog] = useState([]);
   const [importText, setImportText] = useState('');
   const [publishLoading, setPublishLoading] = useState(false);
-  const [publishedUrl, setPublishedUrl] = useState(null);
+  const [publishedUrl, setPublishedUrl] = useState(() => storage.getPublishedUrl());
   const [copyLabel, setCopyLabel] = useState('Copy');
 
   const fetchAuditLog = () => {
@@ -226,6 +226,7 @@ function Admin() {
     setPublishedUrl(null);
     try {
       const { shareUrl } = await uploadServerConfig({ volunteers, walkies, liftCards, eventName: config.eventName });
+      storage.setPublishedUrl(shareUrl);
       setPublishedUrl(shareUrl);
     } catch {
       showMessage('error', 'Failed to publish server list. Check worker configuration.');
