@@ -1108,12 +1108,135 @@
 
 
   <!-- ───────────────────────────────────────
-       SECTION 5 — SETTING UP YOUR TEAM
+       SECTION 5 — RESETTING AFTER A SERVICE
+  ─────────────────────────────────────── -->
+  <section class="section" id="reset">
+
+    <div class="s-eyebrow">
+      <span class="s-num">Section 05</span>
+      <span class="badge a">Team's Appointed Admin</span>
+    </div>
+
+    <h1 class="s-title">Resetting After<br>a Service</h1>
+
+    <p class="s-intro">
+      Once all equipment has been returned at the end of a service, reset the app so it is
+      clean and ready for the next service. This clears all current sign-out records.
+    </p>
+
+    <div class="access-box">
+      <div class="access-box-ico">⚙️</div>
+      <p>
+        Go to the <strong>Admin area</strong> (gear icon) and then navigate to
+        the <strong>Settings</strong> tab.
+      </p>
+    </div>
+
+    <ol class="steps">
+      <li class="step">
+        <p>
+          Before resetting, confirm on the <a href="#return" style="color: var(--gold); text-decoration: underline;">Return screen</a>
+          that all equipment has been returned — the screen should show no items signed out.
+        </p>
+      </li>
+      <li class="step"><p>Go to <strong>Admin → Settings</strong> and scroll down to the <strong>Reset</strong> card.</p></li>
+      <li class="step"><p>Tap <strong>Reset All Equipment</strong> and confirm when prompted.</p></li>
+    </ol>
+
+    <div class="callout warn">
+      <div class="callout-ico">⚠️</div>
+      <p>
+        <strong>What gets cleared.</strong>
+        Reset clears all sign-out records for walkies and lift cards — every item is marked
+        as available again. <strong>The server list, walkie list, and lift card list are not
+        affected</strong> — they carry over to the next service.
+      </p>
+    </div>
+
+    <figure class="ss-figure">
+      <img src="images/SS-11.png" alt="Admin Settings tab showing the Reset All Equipment card at the bottom of the page" />
+      <figcaption>The <strong>Reset All Equipment</strong> button is at the bottom of the Settings tab. This clears all sign-outs for walkies and lift cards — the server and equipment lists are unaffected.</figcaption>
+    </figure>
+
+  </section>
+
+
+  <!-- ───────────────────────────────────────
+       SECTION 6 — ACTIVITY LOG
+  ─────────────────────────────────────── -->
+  <section class="section" id="log">
+
+    <div class="s-eyebrow">
+      <span class="s-num">Section 06</span>
+      <span class="badge a">Team's Appointed Admin</span>
+    </div>
+
+    <h1 class="s-title">Activity Log</h1>
+
+    <p class="s-intro">
+      The Activity Log records every sign-out and return during the service with a timestamp
+      and the server's name. Use it to investigate any discrepancies or to confirm that all
+      equipment was properly returned.
+    </p>
+
+    <div class="access-box">
+      <div class="access-box-ico">⚙️</div>
+      <p>Go to <strong>Admin → Log</strong> tab.</p>
+    </div>
+
+    <p style="color: var(--text-secondary); margin-bottom: 18px; font-size: 14.5px; line-height: 1.75;">
+      Each log entry shows:
+    </p>
+    <ul style="list-style: none; margin-bottom: 24px;">
+      <li style="padding: 6px 0 6px 18px; position: relative; color: var(--text-secondary); font-size: 14.5px; border-bottom: 1px solid var(--border-subtle);">
+        <span style="position:absolute; left:0; color: var(--gold);">→</span>
+        <strong style="color: var(--text);">Action type</strong> — "Collected" (green) or "Returned" (red)
+      </li>
+      <li style="padding: 6px 0 6px 18px; position: relative; color: var(--text-secondary); font-size: 14.5px; border-bottom: 1px solid var(--border-subtle);">
+        <span style="position:absolute; left:0; color: var(--gold);">→</span>
+        <strong style="color: var(--text);">Item</strong> — whether it was a Walkie or Lift Card, and its number
+      </li>
+      <li style="padding: 6px 0 6px 18px; position: relative; color: var(--text-secondary); font-size: 14.5px; border-bottom: 1px solid var(--border-subtle);">
+        <span style="position:absolute; left:0; color: var(--gold);">→</span>
+        <strong style="color: var(--text);">Server name</strong> — who collected or returned it
+      </li>
+      <li style="padding: 6px 0 6px 18px; position: relative; color: var(--text-secondary); font-size: 14.5px;">
+        <span style="position:absolute; left:0; color: var(--gold);">→</span>
+        <strong style="color: var(--text);">Timestamp</strong> — the date and time of the action
+      </li>
+    </ul>
+
+    <p style="font-weight: 600; color: var(--text); margin-bottom: 8px; font-size: 14px;">To clear the log:</p>
+    <ol class="steps">
+      <li class="step"><p>On the Log tab, tap <strong>Clear Log</strong> in the top-right corner.</p></li>
+      <li class="step"><p>Confirm when prompted. The log will be permanently cleared.</p></li>
+    </ol>
+
+    <figure class="ss-figure">
+      <img src="images/SS-14.png" alt="Admin Log tab showing 7 activity entries with a mix of Collected and Returned actions, server names, and timestamps" />
+      <figcaption>The Activity Log — each entry shows the action (<strong>Collected</strong> in green or <strong>Returned</strong> in red), the item, the server's name, and the exact time. Tap <strong>Clear Log</strong> in the top-right to wipe it after a service.</figcaption>
+    </figure>
+
+    <div class="callout tip">
+      <div class="callout-ico">💡</div>
+      <p>
+        <strong>Clear after each service.</strong>
+        Consider clearing the log after the Reset step at the end of each service, so the
+        log only ever reflects the most recent session's activity. This makes it easier to
+        investigate any issues.
+      </p>
+    </div>
+
+  </section>
+
+
+  <!-- ───────────────────────────────────────
+       SECTION 7 — SETTING UP YOUR TEAM
   ─────────────────────────────────────── -->
   <section class="section" id="setup">
 
     <div class="s-eyebrow">
-      <span class="s-num">Section 05</span>
+      <span class="s-num">Section 07</span>
       <span class="badge c">Coordinator</span>
     </div>
 
@@ -1251,12 +1374,12 @@
 
 
   <!-- ───────────────────────────────────────
-       SECTION 5b — EVENT NAME & THEME
+       SECTION 7b — EVENT NAME & THEME
   ─────────────────────────────────────── -->
   <section class="section" id="appearance">
 
     <div class="s-eyebrow">
-      <span class="s-num">Section 05b</span>
+      <span class="s-num">Section 07b</span>
       <span class="badge c">Coordinator</span>
     </div>
 
@@ -1361,12 +1484,12 @@
 
 
   <!-- ───────────────────────────────────────
-       SECTION 6 — PUBLISHING & SHARING
+       SECTION 8 — PUBLISHING & SHARING
   ─────────────────────────────────────── -->
   <section class="section" id="publish">
 
     <div class="s-eyebrow">
-      <span class="s-num">Section 06</span>
+      <span class="s-num">Section 08</span>
       <span class="badge c">Coordinator</span>
     </div>
 
@@ -1430,129 +1553,6 @@
         Publishing shares your team's <em>setup</em> (who's on the list, what equipment exists).
         It does not share live sign-out activity during a service. For that, see
         <a href="#handover" style="color: var(--gold); text-decoration: underline;">Section 04 — Handing Over</a>.
-      </p>
-    </div>
-
-  </section>
-
-
-  <!-- ───────────────────────────────────────
-       SECTION 7 — RESETTING AFTER A SERVICE
-  ─────────────────────────────────────── -->
-  <section class="section" id="reset">
-
-    <div class="s-eyebrow">
-      <span class="s-num">Section 07</span>
-      <span class="badge a">Team's Appointed Admin</span>
-    </div>
-
-    <h1 class="s-title">Resetting After<br>a Service</h1>
-
-    <p class="s-intro">
-      Once all equipment has been returned at the end of a service, reset the app so it is
-      clean and ready for the next service. This clears all current sign-out records.
-    </p>
-
-    <div class="access-box">
-      <div class="access-box-ico">⚙️</div>
-      <p>
-        Go to the <strong>Admin area</strong> (gear icon) and then navigate to
-        the <strong>Settings</strong> tab.
-      </p>
-    </div>
-
-    <ol class="steps">
-      <li class="step">
-        <p>
-          Before resetting, confirm on the <a href="#return" style="color: var(--gold); text-decoration: underline;">Return screen</a>
-          that all equipment has been returned — the screen should show no items signed out.
-        </p>
-      </li>
-      <li class="step"><p>Go to <strong>Admin → Settings</strong> and scroll down to the <strong>Reset</strong> card.</p></li>
-      <li class="step"><p>Tap <strong>Reset All Equipment</strong> and confirm when prompted.</p></li>
-    </ol>
-
-    <div class="callout warn">
-      <div class="callout-ico">⚠️</div>
-      <p>
-        <strong>What gets cleared.</strong>
-        Reset clears all sign-out records for walkies and lift cards — every item is marked
-        as available again. <strong>The server list, walkie list, and lift card list are not
-        affected</strong> — they carry over to the next service.
-      </p>
-    </div>
-
-    <figure class="ss-figure">
-      <img src="images/SS-11.png" alt="Admin Settings tab showing the Reset All Equipment card at the bottom of the page" />
-      <figcaption>The <strong>Reset All Equipment</strong> button is at the bottom of the Settings tab. This clears all sign-outs for walkies and lift cards — the server and equipment lists are unaffected.</figcaption>
-    </figure>
-
-  </section>
-
-
-  <!-- ───────────────────────────────────────
-       SECTION 8 — ACTIVITY LOG
-  ─────────────────────────────────────── -->
-  <section class="section" id="log">
-
-    <div class="s-eyebrow">
-      <span class="s-num">Section 08</span>
-      <span class="badge a">Team's Appointed Admin</span>
-    </div>
-
-    <h1 class="s-title">Activity Log</h1>
-
-    <p class="s-intro">
-      The Activity Log records every sign-out and return during the service with a timestamp
-      and the server's name. Use it to investigate any discrepancies or to confirm that all
-      equipment was properly returned.
-    </p>
-
-    <div class="access-box">
-      <div class="access-box-ico">⚙️</div>
-      <p>Go to <strong>Admin → Log</strong> tab.</p>
-    </div>
-
-    <p style="color: var(--text-secondary); margin-bottom: 18px; font-size: 14.5px; line-height: 1.75;">
-      Each log entry shows:
-    </p>
-    <ul style="list-style: none; margin-bottom: 24px;">
-      <li style="padding: 6px 0 6px 18px; position: relative; color: var(--text-secondary); font-size: 14.5px; border-bottom: 1px solid var(--border-subtle);">
-        <span style="position:absolute; left:0; color: var(--gold);">→</span>
-        <strong style="color: var(--text);">Action type</strong> — "Collected" (green) or "Returned" (red)
-      </li>
-      <li style="padding: 6px 0 6px 18px; position: relative; color: var(--text-secondary); font-size: 14.5px; border-bottom: 1px solid var(--border-subtle);">
-        <span style="position:absolute; left:0; color: var(--gold);">→</span>
-        <strong style="color: var(--text);">Item</strong> — whether it was a Walkie or Lift Card, and its number
-      </li>
-      <li style="padding: 6px 0 6px 18px; position: relative; color: var(--text-secondary); font-size: 14.5px; border-bottom: 1px solid var(--border-subtle);">
-        <span style="position:absolute; left:0; color: var(--gold);">→</span>
-        <strong style="color: var(--text);">Server name</strong> — who collected or returned it
-      </li>
-      <li style="padding: 6px 0 6px 18px; position: relative; color: var(--text-secondary); font-size: 14.5px;">
-        <span style="position:absolute; left:0; color: var(--gold);">→</span>
-        <strong style="color: var(--text);">Timestamp</strong> — the date and time of the action
-      </li>
-    </ul>
-
-    <p style="font-weight: 600; color: var(--text); margin-bottom: 8px; font-size: 14px;">To clear the log:</p>
-    <ol class="steps">
-      <li class="step"><p>On the Log tab, tap <strong>Clear Log</strong> in the top-right corner.</p></li>
-      <li class="step"><p>Confirm when prompted. The log will be permanently cleared.</p></li>
-    </ol>
-
-    <figure class="ss-figure">
-      <img src="images/SS-14.png" alt="Admin Log tab showing 7 activity entries with a mix of Collected and Returned actions, server names, and timestamps" />
-      <figcaption>The Activity Log — each entry shows the action (<strong>Collected</strong> in green or <strong>Returned</strong> in red), the item, the server's name, and the exact time. Tap <strong>Clear Log</strong> in the top-right to wipe it after a service.</figcaption>
-    </figure>
-
-    <div class="callout tip">
-      <div class="callout-ico">💡</div>
-      <p>
-        <strong>Clear after each service.</strong>
-        Consider clearing the log after the Reset step at the end of each service, so the
-        log only ever reflects the most recent session's activity. This makes it easier to
-        investigate any issues.
       </p>
     </div>
 
