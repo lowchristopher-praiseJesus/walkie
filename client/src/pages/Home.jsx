@@ -40,7 +40,6 @@ function Home() {
             src="/Logo.png"
             alt="App logo"
             className="w-24 h-24 object-contain mx-auto mb-3"
-            style={{ mixBlendMode: 'screen' }}
           />
           <h1 className={`text-3xl font-bold ${isLunarTheme ? 'text-amber-100 drop-shadow-lg' : 'text-zinc-100'}`}>
             {config.eventName}
