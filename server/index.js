@@ -12,7 +12,10 @@ app.use(cookieParser(COOKIE_SECRET));
 app.use(express.urlencoded({ extended: false }));
 
 // Login page HTML
-function loginPage(error) {
+function loginPage(error, redirectTo) {
+  const redirectField = redirectTo && redirectTo !== '/login'
+    ? `<input type="hidden" name="redirectTo" value="${redirectTo.replace(/"/g, '&quot;')}">`
+    : '';
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -37,6 +40,7 @@ function loginPage(error) {
     <h1>Walkie Tracker</h1>
     ${error ? '<p class="error">Incorrect password</p>' : ''}
     <form method="POST" action="/login">
+      ${redirectField}
       <label for="password">Password</label>
       <input type="password" id="password" name="password" autofocus required>
       <button type="submit">Enter</button>
@@ -62,13 +66,15 @@ app.use((req, res, next) => {
         sameSite: 'lax',
         maxAge: 30 * 24 * 60 * 60 * 1000 // 30 days
       });
-      return res.redirect('/');
+      const redirectTo = req.body.redirectTo;
+      const safeRedirect = redirectTo && redirectTo.startsWith('/') ? redirectTo : '/';
+      return res.redirect(safeRedirect);
     }
-    return res.send(loginPage(true));
+    return res.send(loginPage(true, req.body.redirectTo));
   }
 
   // Show login page for all other unauthenticated requests
-  res.send(loginPage(false));
+  res.send(loginPage(false, req.originalUrl));
 });
 
 // Serve static files from client build
