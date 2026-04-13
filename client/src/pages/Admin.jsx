@@ -225,7 +225,7 @@ function Admin() {
     setPublishLoading(true);
     setPublishedUrl(null);
     try {
-      const { shareUrl } = await uploadServerConfig(volunteers);
+      const { shareUrl } = await uploadServerConfig({ volunteers, walkies, liftCards, eventName: config.eventName });
       setPublishedUrl(shareUrl);
     } catch {
       showMessage('error', 'Failed to publish server list. Check worker configuration.');

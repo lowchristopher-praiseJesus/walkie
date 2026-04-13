@@ -419,6 +419,20 @@ export const storage = {
     write(KEYS.volunteers, volunteers);
   },
 
+  importWalkies(walkies) {
+    write(KEYS.walkies, walkies);
+  },
+
+  importLiftCards(liftCards) {
+    write(KEYS.liftCards, liftCards);
+  },
+
+  importEventName(eventName) {
+    const config = read(KEYS.config) || {};
+    config.eventName = eventName;
+    write(KEYS.config, config);
+  },
+
   clearEventData() {
     this.resetWalkies();
     this.resetLiftCards();

@@ -20,17 +20,23 @@ export function AppProvider({ children }) {
   const [showStaleModal, setShowStaleModal] = useState(false);
   const [staleTimestamp, setStaleTimestamp] = useState(null);
 
-  // Load volunteer list from R2 if ?server=<uuid> is in the URL
+  // Load team config from R2 if ?team=<uuid> is in the URL
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
-    const serverUuid = params.get('server');
+    const serverUuid = params.get('team');
     if (!serverUuid) return;
 
     setLoading(true);
     fetchServerConfig(serverUuid)
-      .then(({ volunteers }) => {
+      .then(({ volunteers, walkies, liftCards, eventName }) => {
         storage.importVolunteers(volunteers);
+        if (walkies) storage.importWalkies(walkies);
+        if (liftCards) storage.importLiftCards(liftCards);
+        if (eventName) storage.importEventName(eventName);
         setVolunteers(storage.getVolunteers());
+        setWalkies(storage.getWalkies());
+        setLiftCards(storage.getLiftCards());
+        setConfig(storage.getConfig());
       })
       .catch((err) => {
         const msg = err.code === 'not_found'
