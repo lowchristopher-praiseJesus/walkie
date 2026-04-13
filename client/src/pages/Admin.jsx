@@ -223,13 +223,12 @@ function Admin() {
 
   const handlePublishServerList = async () => {
     setPublishLoading(true);
-    setPublishedUrl(null);
     try {
       const { shareUrl } = await uploadServerConfig({ volunteers, walkies, liftCards, eventName: config.eventName });
       storage.setPublishedUrl(shareUrl);
       setPublishedUrl(shareUrl);
     } catch {
-      showMessage('error', 'Failed to publish server list. Check worker configuration.');
+      showMessage('error', 'Failed to publish. Check worker configuration.');
     } finally {
       setPublishLoading(false);
     }
