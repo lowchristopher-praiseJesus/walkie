@@ -389,32 +389,6 @@ function Admin() {
                     ))}
                   </div>
 
-                  <div className="mt-6">
-                    <Button
-                      variant="outline"
-                      className="w-full"
-                      onClick={handlePublishServerList}
-                      disabled={publishLoading}
-                    >
-                      {publishLoading ? 'Publishing…' : 'Publish Server List'}
-                    </Button>
-                    {publishedUrl && (
-                      <div className="mt-3 p-3 bg-zinc-800 rounded-lg">
-                        <p className="text-zinc-400 text-xs mb-2">Share this link to load this server list:</p>
-                        <div className="flex gap-2 items-center">
-                          <input
-                            readOnly
-                            value={publishedUrl}
-                            className="flex-1 bg-zinc-900 text-zinc-100 text-xs px-2 py-1.5 rounded border border-zinc-700 min-w-0"
-                            onFocus={e => e.target.select()}
-                          />
-                          <Button size="sm" variant="outline" onClick={handleCopyUrl}>
-                            {copyLabel}
-                          </Button>
-                        </div>
-                      </div>
-                    )}
-                  </div>
                 </>
               )}
             </div>
@@ -676,6 +650,41 @@ function Admin() {
                       </div>
                     </div>
                   </button>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader>
+                  <CardTitle>Publish Team Info</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-xs text-zinc-500 mb-3">
+                    Publish volunteers, walkies, lift cards, and event name to the cloud. Share the link with other devices to load this team setup.
+                  </p>
+                  <Button
+                    variant="outline"
+                    className="w-full"
+                    onClick={handlePublishServerList}
+                    disabled={publishLoading}
+                  >
+                    {publishLoading ? 'Publishing…' : 'Publish Team Info'}
+                  </Button>
+                  {publishedUrl && (
+                    <div className="mt-3 p-3 bg-zinc-800 rounded-lg">
+                      <p className="text-zinc-400 text-xs mb-2">Share this link to load this team setup:</p>
+                      <div className="flex gap-2 items-center">
+                        <input
+                          readOnly
+                          value={publishedUrl}
+                          className="flex-1 bg-zinc-900 text-zinc-100 text-xs px-2 py-1.5 rounded border border-zinc-700 min-w-0"
+                          onFocus={e => e.target.select()}
+                        />
+                        <Button size="sm" variant="outline" onClick={handleCopyUrl}>
+                          {copyLabel}
+                        </Button>
+                      </div>
+                    </div>
+                  )}
                 </CardContent>
               </Card>
 
