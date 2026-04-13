@@ -1,5 +1,3 @@
-import seedData from './data/seed.json';
-
 function generateId() {
   if (typeof crypto.randomUUID === 'function') return crypto.randomUUID();
   return '10000000-1000-4000-8000-100000000000'.replace(/[018]/g, c =>
@@ -28,11 +26,11 @@ function write(key, data) {
 
 export function initializeStorage() {
   if (localStorage.getItem(KEYS.initialized)) return;
-  write(KEYS.volunteers, seedData.volunteers);
-  write(KEYS.walkies, seedData.walkies);
-  write(KEYS.liftCards, seedData.liftCards);
-  write(KEYS.config, seedData.config);
-  write(KEYS.auditLog, seedData.auditLog);
+  write(KEYS.volunteers, []);
+  write(KEYS.walkies, []);
+  write(KEYS.liftCards, []);
+  write(KEYS.config, { eventName: '', theme: 'default' });
+  write(KEYS.auditLog, []);
   localStorage.setItem(KEYS.dataTimestamp, new Date().toISOString());
   localStorage.setItem(KEYS.initialized, '1');
 }
