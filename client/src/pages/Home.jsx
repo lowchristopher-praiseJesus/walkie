@@ -36,11 +36,6 @@ function Home() {
 
       <div className="max-w-md mx-auto w-full px-4 pt-[40vh] pb-6">
         <header className="text-center py-4 mb-4">
-          <img
-            src="/Logo.png"
-            alt="App logo"
-            className="w-24 h-24 object-contain mx-auto mb-3"
-          />
           <h1 className={`text-3xl font-bold ${isLunarTheme ? 'text-amber-100 drop-shadow-lg' : 'text-zinc-100'}`}>
             {config.eventName}
           </h1>
