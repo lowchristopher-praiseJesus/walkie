@@ -1,0 +1,1761 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Walkie &amp; Lift Card Tracker — User Guide</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    /* ═══════════════════════════════════════
+       VARIABLES & RESET
+    ═══════════════════════════════════════ */
+    :root {
+      --bg:              #0f0e12;
+      --sidebar-bg:      #09080c;
+      --surface:         #1a1820;
+      --surface-2:       #221f2a;
+      --border:          #2a2733;
+      --border-subtle:   #1c1a22;
+      --gold:            #c9a84c;
+      --gold-bright:     #e2bf6e;
+      --gold-dim:        rgba(201, 168, 76, 0.28);
+      --gold-faint:      rgba(201, 168, 76, 0.07);
+      --text:            #f0ebe0;
+      --text-muted:      #6e6880;
+      --text-secondary:  #b0a9be;
+      --coordinator:     #c9a84c;
+      --coordinator-bg:  rgba(201, 168, 76, 0.09);
+      --coordinator-br:  rgba(201, 168, 76, 0.28);
+      --appointed:       #6fa3f0;
+      --appointed-bg:    rgba(111, 163, 240, 0.09);
+      --appointed-br:    rgba(111, 163, 240, 0.28);
+      --sidebar-w:       268px;
+      --hdr-h:           54px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Outfit', sans-serif;
+      font-size: 15px;
+      line-height: 1.72;
+      overflow-x: hidden;
+    }
+
+    /* ═══════════════════════════════════════
+       SIDEBAR
+    ═══════════════════════════════════════ */
+    .sidebar {
+      position: fixed;
+      top: 0; left: 0;
+      width: var(--sidebar-w);
+      height: 100vh;
+      background: var(--sidebar-bg);
+      border-right: 1px solid var(--border);
+      overflow-y: auto;
+      overflow-x: hidden;
+      z-index: 200;
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      scrollbar-width: thin;
+      scrollbar-color: var(--border) transparent;
+    }
+
+    .sidebar::-webkit-scrollbar { width: 4px; }
+    .sidebar::-webkit-scrollbar-track { background: transparent; }
+    .sidebar::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+    /* Brand */
+    .sb-brand {
+      padding: 22px 20px 18px;
+      border-bottom: 1px solid var(--border);
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .sb-logo {
+      width: 36px; height: 36px;
+      background: var(--gold);
+      border-radius: 9px;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 15px;
+      font-weight: 700;
+      color: #1a1000;
+      letter-spacing: 0.05em;
+    }
+
+    .sb-brand-text {}
+    .sb-brand-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 17px;
+      font-weight: 600;
+      color: var(--text);
+      letter-spacing: 0.01em;
+      line-height: 1.2;
+    }
+    .sb-brand-sub {
+      font-size: 10px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-top: 1px;
+    }
+
+    /* Nav */
+    .sb-nav { padding: 14px 0 32px; flex: 1; }
+
+    .nav-group { margin-bottom: 2px; }
+
+    .nav-group-label {
+      font-size: 9.5px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: var(--text-muted);
+      padding: 14px 20px 5px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .nav-group-label::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    a.nav-item {
+      display: block;
+      padding: 7px 20px;
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 13.5px;
+      font-weight: 400;
+      line-height: 1.45;
+      border-left: 2px solid transparent;
+      transition: color 0.14s, background 0.14s, border-color 0.14s;
+    }
+
+    a.nav-item:hover {
+      color: var(--text);
+      background: var(--gold-faint);
+    }
+
+    a.nav-item.active {
+      color: var(--gold);
+      border-left-color: var(--gold);
+      background: var(--gold-faint);
+      font-weight: 500;
+    }
+
+    a.nav-item.sub {
+      padding-left: 34px;
+      font-size: 12.5px;
+      color: var(--text-muted);
+    }
+    a.nav-item.sub:hover { color: var(--text-secondary); }
+    a.nav-item.sub.active { color: var(--gold-bright); border-left-color: var(--gold-bright); }
+
+    .nav-dot {
+      display: inline-block;
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      margin-right: 7px;
+      vertical-align: middle;
+      position: relative; top: -1px;
+    }
+    .nav-dot.c { background: var(--coordinator); }
+    .nav-dot.a { background: var(--appointed); }
+
+    /* Sidebar legend */
+    .sb-legend {
+      padding: 14px 20px 16px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      flex-shrink: 0;
+    }
+    .sb-legend-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+    .sb-legend-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .sb-legend-dot.c { background: var(--coordinator); }
+    .sb-legend-dot.a { background: var(--appointed); }
+
+    /* ═══════════════════════════════════════
+       MOBILE HEADER
+    ═══════════════════════════════════════ */
+    .mob-hdr {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: var(--hdr-h);
+      background: var(--sidebar-bg);
+      border-bottom: 1px solid var(--border);
+      z-index: 199;
+      align-items: center;
+      padding: 0 16px;
+      gap: 12px;
+    }
+
+    .hbg {
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 8px 6px;
+      color: var(--text);
+      display: flex;
+      flex-direction: column;
+      gap: 4.5px;
+      flex-shrink: 0;
+    }
+    .hbg span {
+      display: block;
+      width: 20px; height: 2px;
+      background: currentColor;
+      border-radius: 2px;
+      transition: all 0.22s ease;
+    }
+    .hbg.open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+    .hbg.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+    .hbg.open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+
+    .mob-hdr-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--text);
+      flex: 1;
+    }
+
+    /* ═══════════════════════════════════════
+       OVERLAY
+    ═══════════════════════════════════════ */
+    .overlay {
+      display: none;
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0.65);
+      z-index: 198;
+      backdrop-filter: blur(3px);
+      -webkit-backdrop-filter: blur(3px);
+    }
+    .overlay.on { display: block; }
+
+    /* ═══════════════════════════════════════
+       MAIN CONTENT
+    ═══════════════════════════════════════ */
+    .main {
+      margin-left: var(--sidebar-w);
+      min-height: 100vh;
+    }
+
+    .content {
+      max-width: 730px;
+      margin: 0 auto;
+      padding: 64px 52px 100px;
+    }
+
+    /* ═══════════════════════════════════════
+       SECTIONS
+    ═══════════════════════════════════════ */
+    .section {
+      padding-top: 72px;
+      padding-bottom: 56px;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+    .section:first-child { padding-top: 0; }
+    .section:last-child { border-bottom: none; padding-bottom: 0; }
+
+    .s-eyebrow {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .s-num {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--text-muted);
+    }
+
+    .badge {
+      font-size: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      padding: 3px 9px;
+      border-radius: 20px;
+    }
+    .badge.c {
+      background: var(--coordinator-bg);
+      color: var(--coordinator);
+      border: 1px solid var(--coordinator-br);
+    }
+    .badge.a {
+      background: var(--appointed-bg);
+      color: var(--appointed);
+      border: 1px solid var(--appointed-br);
+    }
+    .badge.all {
+      background: rgba(255,255,255,0.05);
+      color: var(--text-secondary);
+      border: 1px solid var(--border);
+    }
+
+    .s-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 40px;
+      font-weight: 600;
+      color: var(--text);
+      line-height: 1.08;
+      letter-spacing: -0.01em;
+      margin-bottom: 14px;
+    }
+
+    .s-intro {
+      color: var(--text-secondary);
+      font-size: 15.5px;
+      max-width: 580px;
+      line-height: 1.78;
+      margin-bottom: 32px;
+    }
+
+    /* Subsections */
+    .subsection { margin-top: 44px; }
+
+    .sub-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 26px;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 10px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    /* ═══════════════════════════════════════
+       STEPS
+    ═══════════════════════════════════════ */
+    .steps {
+      list-style: none;
+      counter-reset: step;
+      margin: 20px 0 24px;
+    }
+
+    .step {
+      counter-increment: step;
+      display: flex;
+      gap: 14px;
+      margin-bottom: 14px;
+      align-items: flex-start;
+    }
+
+    .step::before {
+      content: counter(step);
+      width: 26px; height: 26px;
+      min-width: 26px;
+      background: var(--gold-dim);
+      color: var(--gold);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 600;
+      margin-top: 2px;
+      border: 1px solid var(--gold-dim);
+      flex-shrink: 0;
+    }
+
+    .step p { color: var(--text); line-height: 1.65; }
+    .step p strong { color: var(--gold-bright); font-weight: 500; }
+    .step p em { color: var(--text-secondary); font-style: italic; }
+
+    /* ═══════════════════════════════════════
+       CALLOUTS
+    ═══════════════════════════════════════ */
+    .callout {
+      padding: 14px 18px;
+      border-radius: 8px;
+      margin: 22px 0;
+      display: flex;
+      gap: 13px;
+      align-items: flex-start;
+    }
+    .callout.tip {
+      background: var(--appointed-bg);
+      border: 1px solid var(--appointed-br);
+    }
+    .callout.note {
+      background: var(--gold-faint);
+      border: 1px solid var(--gold-dim);
+    }
+    .callout.warn {
+      background: rgba(240, 100, 70, 0.07);
+      border: 1px solid rgba(240, 100, 70, 0.22);
+    }
+    .callout-ico { font-size: 15px; flex-shrink: 0; line-height: 1.65; }
+    .callout p { font-size: 14px; color: var(--text-secondary); line-height: 1.65; }
+    .callout p strong { color: var(--text); font-weight: 500; }
+
+    /* ═══════════════════════════════════════
+       SCREENSHOT (ACTUAL IMAGE)
+    ═══════════════════════════════════════ */
+    .ss-figure {
+      margin: 28px 0;
+      text-align: center;
+    }
+
+    .ss-figure img {
+      max-width: 320px;
+      width: 100%;
+      border-radius: 16px;
+      border: 1px solid var(--border);
+      box-shadow: 0 8px 40px rgba(0,0,0,0.55);
+      display: block;
+      margin: 0 auto 12px;
+    }
+
+    .ss-figure figcaption {
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.6;
+      max-width: 360px;
+      margin: 0 auto;
+    }
+
+    .ss-figure figcaption strong {
+      color: var(--text-secondary);
+      font-weight: 500;
+    }
+
+    .ss-pair {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      margin-bottom: 12px;
+    }
+
+    .ss-pair img {
+      max-width: 48%;
+      width: 100%;
+      border-radius: 16px;
+      border: 1px solid var(--border);
+      box-shadow: 0 8px 40px rgba(0,0,0,0.55);
+      margin: 0;
+    }
+
+    /* ═══════════════════════════════════════
+       SCREENSHOT PLACEHOLDER
+    ═══════════════════════════════════════ */
+    .ss {
+      position: relative;
+      border: 1.5px dashed var(--gold-dim);
+      border-radius: 12px;
+      padding: 30px 20px 26px;
+      margin: 28px 0;
+      background: var(--gold-faint);
+      text-align: center;
+    }
+    .ss-tag {
+      position: absolute;
+      top: -10px; left: 18px;
+      background: var(--bg);
+      padding: 0 8px;
+      font-size: 9.5px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: var(--gold);
+    }
+    .ss-id {
+      position: absolute;
+      top: -10px; right: 18px;
+      background: var(--bg);
+      padding: 0 8px;
+      font-size: 9.5px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      color: var(--text-muted);
+    }
+    .ss-ico { font-size: 26px; opacity: 0.45; margin-bottom: 8px; }
+    .ss-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 5px;
+    }
+    .ss-desc {
+      font-size: 12.5px;
+      color: var(--text-muted);
+      max-width: 380px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+    .ss-cap {
+      font-size: 11px;
+      color: var(--gold);
+      margin-top: 10px;
+      font-style: italic;
+      opacity: 0.75;
+    }
+
+    /* ═══════════════════════════════════════
+       ROLE CARDS (Overview)
+    ═══════════════════════════════════════ */
+    .role-cards {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin: 28px 0 12px;
+    }
+    .role-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+    }
+    .role-card.c { border-top: 3px solid var(--coordinator); }
+    .role-card.a { border-top: 3px solid var(--appointed); }
+
+    .rc-title {
+      font-weight: 600;
+      font-size: 14px;
+      margin-bottom: 2px;
+    }
+    .role-card.c .rc-title { color: var(--coordinator); }
+    .role-card.a .rc-title { color: var(--appointed); }
+
+    .rc-sub {
+      font-size: 11.5px;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+    }
+    .rc-list { list-style: none; font-size: 13px; color: var(--text-secondary); }
+    .rc-list li { padding: 2.5px 0 2.5px 14px; position: relative; }
+    .rc-list li::before { content: '→'; position: absolute; left: 0; color: var(--text-muted); font-size: 10px; top: 5px; }
+
+    /* ═══════════════════════════════════════
+       ACCESS BOX
+    ═══════════════════════════════════════ */
+    .access-box {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 14px 18px;
+      margin-bottom: 28px;
+      display: flex;
+      align-items: flex-start;
+      gap: 13px;
+    }
+    .access-box-ico { font-size: 18px; flex-shrink: 0; margin-top: 2px; }
+    .access-box p { font-size: 14px; color: var(--text-secondary); line-height: 1.65; }
+    .access-box p strong { color: var(--text); }
+
+    /* ═══════════════════════════════════════
+       QUICK REFERENCE TABLE
+    ═══════════════════════════════════════ */
+    .ref-table-wrap { overflow-x: auto; margin: 24px 0; border-radius: 10px; border: 1px solid var(--border); }
+
+    table.ref-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13.5px;
+    }
+    table.ref-table th {
+      text-align: left;
+      padding: 10px 16px;
+      background: var(--surface-2);
+      color: var(--text-muted);
+      font-size: 10.5px;
+      text-transform: uppercase;
+      letter-spacing: 0.11em;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+    table.ref-table td {
+      padding: 10px 16px;
+      border-top: 1px solid var(--border-subtle);
+      color: var(--text-secondary);
+      vertical-align: middle;
+    }
+    table.ref-table td:first-child { color: var(--text); font-weight: 500; }
+    table.ref-table tr:hover td { background: var(--gold-faint); }
+    .path {
+      font-family: 'Courier New', monospace;
+      font-size: 11.5px;
+      color: var(--gold);
+      background: var(--gold-faint);
+      padding: 1px 6px;
+      border-radius: 4px;
+      white-space: nowrap;
+    }
+
+    /* ═══════════════════════════════════════
+       LIMITS GRID
+    ═══════════════════════════════════════ */
+    .limits-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin: 24px 0;
+      max-width: 380px;
+    }
+    .limit-item {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 16px 20px;
+      text-align: center;
+    }
+    .limit-n {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 44px;
+      font-weight: 600;
+      color: var(--gold);
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+    .limit-lbl { font-size: 12px; color: var(--text-muted); }
+
+    /* ═══════════════════════════════════════
+       SCREENSHOTS APPENDIX
+    ═══════════════════════════════════════ */
+    .appendix-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin: 24px 0;
+    }
+    .appendix-item {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 14px 16px;
+    }
+    .appendix-id {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--gold);
+      margin-bottom: 4px;
+    }
+    .appendix-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 5px;
+    }
+    .appendix-desc { font-size: 12px; color: var(--text-muted); line-height: 1.55; }
+
+    /* ═══════════════════════════════════════
+       RESPONSIVE
+    ═══════════════════════════════════════ */
+    @media (max-width: 920px) {
+      .sidebar { transform: translateX(-100%); }
+      .sidebar.open { transform: translateX(0); box-shadow: 16px 0 40px rgba(0,0,0,0.5); }
+      .mob-hdr { display: flex; }
+      .main { margin-left: 0; padding-top: var(--hdr-h); }
+      .content { padding: 40px 28px 80px; }
+    }
+
+    @media (max-width: 600px) {
+      .content { padding: 32px 18px 60px; }
+      .s-title { font-size: 30px; }
+      .role-cards { grid-template-columns: 1fr; }
+      .appendix-grid { grid-template-columns: 1fr; }
+      .sub-title { font-size: 22px; }
+    }
+
+    @media (max-width: 400px) {
+      .s-title { font-size: 26px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════
+     SIDEBAR
+═══════════════════════════════════════ -->
+<nav class="sidebar" id="sidebar" aria-label="Guide navigation">
+
+  <div class="sb-brand">
+    <div class="sb-logo">WT</div>
+    <div class="sb-brand-text">
+      <div class="sb-brand-name">Walkie Tracker</div>
+      <div class="sb-brand-sub">User Guide</div>
+    </div>
+  </div>
+
+  <div class="sb-nav">
+
+    <div class="nav-group">
+      <a href="#overview" class="nav-item active">Overview</a>
+    </div>
+
+    <div class="nav-group">
+      <div class="nav-group-label">
+        <span class="nav-dot a"></span>Team's Appointed Admin
+      </div>
+      <a href="#collect"  class="nav-item"><span class="nav-dot a"></span>Collecting Equipment</a>
+      <a href="#return"   class="nav-item"><span class="nav-dot a"></span>Returning Equipment</a>
+      <a href="#handover" class="nav-item"><span class="nav-dot a"></span>Handing Over Mid-Service</a>
+    </div>
+
+    <div class="nav-group">
+      <div class="nav-group-label">
+        <span class="nav-dot c"></span>Coordinator
+      </div>
+      <a href="#setup"          class="nav-item"><span class="nav-dot c"></span>Setting Up Your Team</a>
+      <a href="#setup-servers"  class="nav-item sub">Servers</a>
+      <a href="#setup-walkies"  class="nav-item sub">Walkies</a>
+      <a href="#setup-liftcards"class="nav-item sub">Lift Cards</a>
+      <a href="#publish"        class="nav-item"><span class="nav-dot c"></span>Publishing &amp; Sharing</a>
+      <a href="#reset"          class="nav-item"><span class="nav-dot c"></span>Resetting After a Service</a>
+      <a href="#log"            class="nav-item"><span class="nav-dot c"></span>Activity Log</a>
+    </div>
+
+    <div class="nav-group">
+      <div class="nav-group-label">Reference</div>
+      <a href="#quickref" class="nav-item">Quick Reference</a>
+      <a href="#screenshots-appendix" class="nav-item">Screenshot Checklist</a>
+    </div>
+
+  </div>
+
+  <div class="sb-legend">
+    <div class="sb-legend-item">
+      <div class="sb-legend-dot a"></div>
+      <span>Team's Appointed Admin</span>
+    </div>
+    <div class="sb-legend-item">
+      <div class="sb-legend-dot c"></div>
+      <span>Coordinator</span>
+    </div>
+  </div>
+
+</nav>
+
+<!-- ═══════════════════════════════════════
+     MOBILE HEADER
+═══════════════════════════════════════ -->
+<header class="mob-hdr" id="mob-hdr">
+  <button class="hbg" id="hbg" aria-label="Toggle navigation">
+    <span></span><span></span><span></span>
+  </button>
+  <span class="mob-hdr-title">Walkie Tracker — Guide</span>
+</header>
+
+<!-- Overlay -->
+<div class="overlay" id="overlay"></div>
+
+<!-- ═══════════════════════════════════════
+     MAIN CONTENT
+═══════════════════════════════════════ -->
+<main class="main">
+<div class="content">
+
+  <!-- ───────────────────────────────────────
+       SECTION 1 — OVERVIEW
+  ─────────────────────────────────────── -->
+  <section class="section" id="overview">
+
+    <div class="s-eyebrow">
+      <span class="s-num">Section 01</span>
+      <span class="badge all">All users</span>
+    </div>
+
+    <h1 class="s-title">Overview</h1>
+
+    <p class="s-intro">
+      The Walkie &amp; Lift Card Tracker is a mobile-friendly web app used during church services
+      to keep track of which server has which walkie-talkie or lift card. It runs in your phone's
+      browser — there is nothing to install.
+    </p>
+
+    <figure class="ss-figure">
+      <img src="images/SS-01.png" alt="Home screen showing the event name, date, item count, and the Collect and Return buttons" />
+      <figcaption>The home screen — tap <strong>Collect Walkie / Lift Card</strong> or <strong>Return Walkie / Lift Card</strong> to get started. The gear icon (top-right) opens the Admin area.</figcaption>
+    </figure>
+
+    <h2 class="sub-title" style="margin-top: 32px;">The Two Roles</h2>
+    <p style="color: var(--text-secondary); margin-bottom: 18px; font-size: 14.5px;">
+      Different people use the app for different purposes. Sections in this guide are colour-coded
+      to indicate which role they apply to.
+    </p>
+
+    <div class="role-cards">
+      <div class="role-card a">
+        <div class="rc-title">Team's Appointed Admin</div>
+        <div class="rc-sub">1–2 people per team, active during the service</div>
+        <ul class="rc-list">
+          <li>Records who collects a walkie or lift card</li>
+          <li>Records when equipment is returned</li>
+          <li>Hands over to another person mid-service if needed</li>
+        </ul>
+      </div>
+      <div class="role-card c">
+        <div class="rc-title">Coordinator</div>
+        <div class="rc-sub">Sets up and maintains the team's data</div>
+        <ul class="rc-list">
+          <li>Adds and manages the server list</li>
+          <li>Adds and manages walkies and lift cards</li>
+          <li>Publishes the team link for others to use</li>
+          <li>Resets equipment after each service</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="callout note">
+      <div class="callout-ico">💡</div>
+      <p>
+        <strong>Same person, different hats.</strong>
+        The Coordinator and the Team's Appointed Admin may be the same person in smaller teams.
+        That's perfectly fine — just follow the relevant sections as needed.
+      </p>
+    </div>
+
+    <h2 class="sub-title">How to Access the App</h2>
+    <p style="color: var(--text-secondary); font-size: 14.5px; line-height: 1.75;">
+      The app is accessed through a unique URL on your phone's browser. Each team has its own URL
+      which loads their specific server, walkie, and lift card list. Your Coordinator will share
+      this link with you — save it to your phone's home screen or bookmarks for quick access
+      during a service.
+    </p>
+
+    <div class="callout tip">
+      <div class="callout-ico">📌</div>
+      <p>
+        <strong>Bookmark your team's link.</strong>
+        Your team's URL is unique to your team's data. Using someone else's link will load their
+        team's servers and equipment, not yours.
+      </p>
+    </div>
+
+  </section>
+
+
+  <!-- ───────────────────────────────────────
+       SECTION 2 — COLLECTING EQUIPMENT
+  ─────────────────────────────────────── -->
+  <section class="section" id="collect">
+
+    <div class="s-eyebrow">
+      <span class="s-num">Section 02</span>
+      <span class="badge a">Team's Appointed Admin</span>
+    </div>
+
+    <h1 class="s-title">Collecting Equipment</h1>
+
+    <p class="s-intro">
+      When a server needs to draw a walkie or lift card for the service, record it here.
+      You will select their name and then tap the specific item(s) they are taking.
+    </p>
+
+    <figure class="ss-figure">
+      <img src="images/SS-02.png" alt="Letter selection screen showing a grid of letters for filtering servers by first name" />
+      <figcaption>Only letters that have at least one server are shown — tap the first letter of the server's first name to continue.</figcaption>
+    </figure>
+
+    <ol class="steps">
+      <li class="step">
+        <p>From the home screen, tap <strong>Collect Walkie / Lift Card</strong>.</p>
+      </li>
+      <li class="step">
+        <p>
+          Tap the <strong>first letter of the server's first name</strong> from the letter grid.
+          Only letters that have at least one server are shown.
+        </p>
+      </li>
+      <li class="step">
+        <p>
+          Find and tap the <strong>server's name</strong> from the list.
+          If a server already has equipment signed out to them, a warning badge will appear
+          next to their name — <em>e.g. "has walkie #3"</em>. You can still proceed to
+          issue them additional items if needed.
+        </p>
+      </li>
+      <li class="step">
+        <p>
+          On the equipment selection screen, tap the <strong>walkie(s)</strong> the server is taking
+          — up to 2 walkies may be selected. If they are also taking a lift card, scroll down
+          and tap the <strong>lift card(s)</strong> as well — up to 2 lift cards may be selected.
+          Lift cards are optional.
+        </p>
+      </li>
+      <li class="step">
+        <p>
+          Tap <strong>Done</strong> to confirm. You will be returned to the home screen
+          and the item count will update.
+        </p>
+      </li>
+    </ol>
+
+    <figure class="ss-figure">
+      <img src="images/SS-03.png" alt="Name list showing servers filtered by the selected letter, with a server name to tap" />
+      <figcaption>All servers whose first name starts with the selected letter are listed — tap the correct name to proceed to equipment selection.</figcaption>
+    </figure>
+
+    <figure class="ss-figure">
+      <div class="ss-pair">
+        <img src="images/SS-04-1.png" alt="Top of equipment selection screen showing the walkie grid" />
+        <img src="images/SS-04-2.png" alt="Bottom of equipment selection screen showing lift cards and the Done button" />
+      </div>
+      <figcaption>The equipment selection screen — scroll down past the walkie grid to reach the <strong>Lift Cards</strong> section and the <strong>Done</strong> button at the bottom.</figcaption>
+    </figure>
+
+    <div class="limits-grid">
+      <div class="limit-item">
+        <div class="limit-n">2</div>
+        <div class="limit-lbl">max walkies per sign-out</div>
+      </div>
+      <div class="limit-item">
+        <div class="limit-n">2</div>
+        <div class="limit-lbl">max lift cards per sign-out</div>
+      </div>
+    </div>
+
+    <div class="callout note">
+      <div class="callout-ico">💡</div>
+      <p>
+        <strong>No equipment available?</strong>
+        If no walkies or lift cards are shown, all available items are already signed out.
+        Check the Return screen to see who currently has equipment, or ask your Coordinator
+        to verify the item list.
+      </p>
+    </div>
+
+  </section>
+
+
+  <!-- ───────────────────────────────────────
+       SECTION 3 — RETURNING EQUIPMENT
+  ─────────────────────────────────────── -->
+  <section class="section" id="return">
+
+    <div class="s-eyebrow">
+      <span class="s-num">Section 03</span>
+      <span class="badge a">Team's Appointed Admin</span>
+    </div>
+
+    <h1 class="s-title">Returning Equipment</h1>
+
+    <p class="s-intro">
+      When a server hands back their walkie or lift card, record it here. All currently issued
+      items are shown as tiles — tap the tile to mark it returned.
+    </p>
+
+    <ol class="steps">
+      <li class="step">
+        <p>From the home screen, tap <strong>Return Walkie / Lift Card</strong>.</p>
+      </li>
+      <li class="step">
+        <p>
+          The screen shows all currently signed-out items as tiles. Each tile displays the
+          <strong>item number</strong> and the <strong>server's name</strong> who has it.
+        </p>
+      </li>
+      <li class="step">
+        <p>
+          Tap the tile for the item being returned. The tile will immediately go
+          <strong>dim and faded</strong> to confirm it has been marked as returned.
+        </p>
+      </li>
+      <li class="step">
+        <p>
+          If you tapped the wrong tile by mistake, <strong>tap the dimmed tile again</strong>
+          to undo the return and restore the item to its previous state.
+        </p>
+      </li>
+    </ol>
+
+    <figure class="ss-figure">
+      <img src="images/SS-05.png" alt="Return screen showing active walkie and lift card tiles, each labelled with the server's name" />
+      <figcaption>All currently issued items are shown — walkies and lift cards grouped separately, each tile showing the item number and the server who has it.</figcaption>
+    </figure>
+
+    <figure class="ss-figure">
+      <img src="images/SS-06.png" alt="Return screen showing Walkie 2 dimmed after being tapped to return, while all other tiles remain active" />
+      <figcaption>Walkie #2 has been tapped and is now dimmed — confirming it has been returned. Tap it again to undo if needed. All other items remain active until tapped.</figcaption>
+    </figure>
+
+    <div class="callout tip">
+      <div class="callout-ico">↩️</div>
+      <p>
+        <strong>Accidental tap?</strong> Dimmed tiles can always be tapped again to undo.
+        The return is only truly final once you leave the screen — so double-check before
+        navigating away if you are processing several returns at once.
+      </p>
+    </div>
+
+    <div class="callout note">
+      <div class="callout-ico">✅</div>
+      <p>
+        <strong>All returned.</strong>
+        When no items are signed out, the screen will show a message confirming that no
+        equipment is currently issued. This is your confirmation that everything is accounted for.
+      </p>
+    </div>
+
+  </section>
+
+
+  <!-- ───────────────────────────────────────
+       SECTION 4 — HANDING OVER
+  ─────────────────────────────────────── -->
+  <section class="section" id="handover">
+
+    <div class="s-eyebrow">
+      <span class="s-num">Section 04</span>
+      <span class="badge a">Team's Appointed Admin</span>
+    </div>
+
+    <h1 class="s-title">Handing Over<br><em style="font-style:italic; color: var(--text-secondary); font-size:0.8em;">Mid-Service</em></h1>
+
+    <p class="s-intro">
+      If you need to pass responsibility to someone else while the service is still in progress,
+      use the Data export to transfer the full live state — including who currently holds
+      what equipment — to their device.
+    </p>
+
+    <div class="access-box">
+      <div class="access-box-ico">⚙️</div>
+      <p>
+        This requires access to the <strong>Admin area</strong>. Tap the gear icon
+        in the top-right corner of the home screen, then enter the <strong>PIN</strong>
+        provided by your Coordinator.
+      </p>
+    </div>
+
+    <h2 class="sub-title">Step 1 — Export on Your Device</h2>
+
+    <ol class="steps">
+      <li class="step">
+        <p>Go to <strong>Admin → Data</strong> tab.</p>
+      </li>
+      <li class="step">
+        <p>
+          Tap <strong>Copy to Clipboard</strong>. A success message confirms the
+          data has been copied.
+        </p>
+      </li>
+      <li class="step">
+        <p>
+          Paste the copied text into a <strong>WhatsApp or Telegram message</strong>
+          and send it to the person taking over.
+        </p>
+      </li>
+    </ol>
+
+    <h2 class="sub-title">Step 2 — Import on Their Device</h2>
+
+    <ol class="steps">
+      <li class="step">
+        <p>On the receiving phone, open your team's app URL and go to <strong>Admin → Data</strong> tab.</p>
+      </li>
+      <li class="step">
+        <p>
+          <strong>Paste</strong> the received text into the Import text box.
+        </p>
+      </li>
+      <li class="step">
+        <p>
+          Tap <strong>Import</strong>. A summary will appear showing what will be loaded
+          (e.g. "12 servers, 8 walkies, 4 lift cards"). Confirm to proceed.
+        </p>
+      </li>
+    </ol>
+
+    <figure class="ss-figure">
+      <img src="images/SS-13.png" alt="Admin Data tab showing the Export Data card with Copy to Clipboard button and the Import Data card with a paste text area" />
+      <figcaption>The Data tab — use <strong>Copy to Clipboard</strong> to export your current state, then send it via WhatsApp or Telegram. The receiving device pastes it into the Import field and taps <strong>Import</strong>.</figcaption>
+    </figure>
+
+    <div class="callout warn">
+      <div class="callout-ico">⚠️</div>
+      <p>
+        <strong>Import replaces all current data.</strong>
+        When the receiving person imports, their current app state (servers, walkies, lift cards,
+        and all sign-out records) will be fully replaced by the exported data. Make sure they
+        are not actively using the app with different data before importing.
+      </p>
+    </div>
+
+  </section>
+
+
+  <!-- ───────────────────────────────────────
+       SECTION 5 — SETTING UP YOUR TEAM
+  ─────────────────────────────────────── -->
+  <section class="section" id="setup">
+
+    <div class="s-eyebrow">
+      <span class="s-num">Section 05</span>
+      <span class="badge c">Coordinator</span>
+    </div>
+
+    <h1 class="s-title">Setting Up<br>Your Team</h1>
+
+    <p class="s-intro">
+      Before the first service, you need to add your team's servers, walkies, and lift cards
+      to the app. This is a one-time setup — once done, the list carries over from service
+      to service. You only need to return here when the list changes.
+    </p>
+
+    <div class="access-box">
+      <div class="access-box-ico">⚙️</div>
+      <p>
+        Access the Admin area by tapping the <strong>gear icon</strong> in the top-right corner
+        of the home screen and entering your team's <strong>PIN</strong>. You will see tabs for
+        Servers, Walkies, Lift Cards, Settings, Data, and Log.
+      </p>
+    </div>
+
+    <figure class="ss-figure">
+      <img src="images/SS-07.png" alt="Home screen with a yellow arrow pointing to the gear icon in the top-right corner" />
+      <figcaption>Tap the gear icon in the top-right corner of the home screen to access the Admin area, then enter your team's PIN.</figcaption>
+    </figure>
+
+    <!-- SUBSECTION: Servers -->
+    <div class="subsection" id="setup-servers">
+      <h2 class="sub-title">Servers</h2>
+      <p style="color: var(--text-secondary); margin-bottom: 18px; font-size: 14.5px;">
+        The Servers list contains all the volunteers who may need to draw a walkie or lift card
+        during a service. Their names appear in the sign-out flow for the Team's Appointed Admin
+        to select from.
+      </p>
+
+      <p style="font-weight: 600; color: var(--text); margin-bottom: 8px; font-size: 14px;">To add a server:</p>
+      <ol class="steps">
+        <li class="step"><p>Go to <strong>Admin → Servers</strong> tab.</p></li>
+        <li class="step"><p>Fill in the server's <strong>First Name</strong> (required). Last Name and Phone are optional.</p></li>
+        <li class="step"><p>Tap <strong>Add Server</strong>. The new server will appear in the list below, sorted by last name.</p></li>
+      </ol>
+
+      <p style="font-weight: 600; color: var(--text); margin-bottom: 8px; font-size: 14px;">To edit a server:</p>
+      <ol class="steps">
+        <li class="step"><p>Find the server in the list and tap <strong>Edit</strong>.</p></li>
+        <li class="step"><p>Update the details and tap <strong>Save</strong>. Or tap <strong>Cancel</strong> to discard.</p></li>
+      </ol>
+
+      <p style="font-weight: 600; color: var(--text); margin-bottom: 8px; font-size: 14px;">To remove a server:</p>
+      <ol class="steps">
+        <li class="step"><p>Find the server in the list and tap <strong>Delete</strong>. Confirm when prompted.</p></li>
+      </ol>
+
+      <figure class="ss-figure">
+        <img src="images/SS-08.png" alt="Admin Servers tab showing the Add Server form at the top and a list of existing servers with Edit and Delete buttons" />
+        <figcaption>The Servers tab — fill in the <strong>Add Server</strong> form at the top to add a new server. Existing servers are listed below (29 in this example), each with <strong>Edit</strong> and <strong>Delete</strong> buttons.</figcaption>
+      </figure>
+    </div>
+
+    <!-- SUBSECTION: Walkies -->
+    <div class="subsection" id="setup-walkies">
+      <h2 class="sub-title">Walkies</h2>
+      <p style="color: var(--text-secondary); margin-bottom: 18px; font-size: 14.5px;">
+        The Walkies list defines which walkie units are available. Each walkie is identified
+        by a number. You can temporarily disable a unit (e.g. if it is faulty) without
+        deleting it from the list.
+      </p>
+
+      <p style="font-weight: 600; color: var(--text); margin-bottom: 8px; font-size: 14px;">To add a walkie:</p>
+      <ol class="steps">
+        <li class="step"><p>Go to <strong>Admin → Walkies</strong> tab.</p></li>
+        <li class="step"><p>Enter the <strong>walkie number</strong> and optionally any notes (e.g. channel setting).</p></li>
+        <li class="step"><p>Tap <strong>Add Walkie</strong>.</p></li>
+      </ol>
+
+      <p style="font-weight: 600; color: var(--text); margin-bottom: 8px; font-size: 14px;">To disable a walkie (mark as unusable):</p>
+      <ol class="steps">
+        <li class="step">
+          <p>
+            Find the walkie in the list and tap <strong>Disable</strong>.
+            The walkie will be marked with an "unusable" badge and will no longer appear
+            in the sign-out screen for servers to select.
+          </p>
+        </li>
+        <li class="step"><p>To make it available again, tap <strong>Enable</strong> next to the same walkie.</p></li>
+      </ol>
+
+      <p style="font-weight: 600; color: var(--text); margin-bottom: 8px; font-size: 14px;">To edit or delete a walkie:</p>
+      <ol class="steps">
+        <li class="step"><p>Use the <strong>Edit</strong> button to update the number or notes, then tap Save.</p></li>
+        <li class="step"><p>Use the <strong>Delete</strong> button to permanently remove the walkie from the list.</p></li>
+      </ol>
+
+      <div class="callout note">
+        <div class="callout-ico">💡</div>
+        <p>
+          <strong>Disable vs Delete.</strong>
+          Use <em>Disable</em> for temporary issues (flat battery, in repair). Use <em>Delete</em>
+          only if the walkie is no longer part of your team's inventory. A disabled walkie
+          remains on the list and can be re-enabled at any time.
+        </p>
+      </div>
+
+      <figure class="ss-figure">
+        <img src="images/SS-09.png" alt="Admin Walkies tab showing the Add Walkie form and a list of 22 walkies with in use and unusable status badges" />
+        <figcaption>The Walkies tab — 22 walkies in this example. Walkies marked <strong>in use</strong> are currently signed out; walkie #2 is marked <strong>unusable</strong> and shows an <strong>Enable</strong> button to restore it. Active walkies show a <strong>Disable</strong> button instead.</figcaption>
+      </figure>
+    </div>
+
+    <!-- SUBSECTION: Lift Cards -->
+    <div class="subsection" id="setup-liftcards">
+      <h2 class="sub-title">Lift Cards</h2>
+      <p style="color: var(--text-secondary); margin-bottom: 18px; font-size: 14.5px;">
+        Lift cards are managed the same way as walkies. Each card has a number, an optional
+        notes field, and can be disabled without being permanently deleted.
+      </p>
+
+      <p style="font-weight: 600; color: var(--text); margin-bottom: 8px; font-size: 14px;">To add a lift card:</p>
+      <ol class="steps">
+        <li class="step"><p>Go to <strong>Admin → Lift Cards</strong> tab.</p></li>
+        <li class="step"><p>Enter the <strong>card number</strong> and any optional notes.</p></li>
+        <li class="step"><p>Tap <strong>Add Lift Card</strong>.</p></li>
+      </ol>
+
+      <p style="color: var(--text-secondary); margin-top: 12px; font-size: 14px;">
+        To <strong>edit</strong>, <strong>disable</strong>, or <strong>delete</strong> a lift card,
+        follow the same steps described for Walkies above.
+      </p>
+
+      <figure class="ss-figure">
+        <img src="images/SS-10.png" alt="Admin Lift Cards tab showing the Add Lift Card form and a list of 5 lift cards with in use and unusable status badges" />
+        <figcaption>The Lift Cards tab — 5 cards in this example. Cards #1 and #2 are <strong>in use</strong>; card #3 is marked <strong>unusable</strong> and can be re-enabled at any time. The same Disable, Edit, and Delete actions available for walkies apply here.</figcaption>
+      </figure>
+    </div>
+
+  </section>
+
+
+  <!-- ───────────────────────────────────────
+       SECTION 6 — PUBLISHING & SHARING
+  ─────────────────────────────────────── -->
+  <section class="section" id="publish">
+
+    <div class="s-eyebrow">
+      <span class="s-num">Section 06</span>
+      <span class="badge c">Coordinator</span>
+    </div>
+
+    <h1 class="s-title">Publishing &amp;<br>Sharing Your Team</h1>
+
+    <p class="s-intro">
+      After setting up your server, walkie, and lift card lists, publish the data to generate
+      your team's unique link. This link is what your Team's Appointed Admin (and any other
+      relevant personnel) will use to open the app with your team's data pre-loaded.
+    </p>
+
+    <h2 class="sub-title">Publishing Your Team Info</h2>
+
+    <ol class="steps">
+      <li class="step"><p>Go to <strong>Admin → Settings</strong> tab.</p></li>
+      <li class="step"><p>Scroll down to the <strong>Publish Team Info</strong> card and tap <strong>Publish Team Info</strong>.</p></li>
+      <li class="step">
+        <p>
+          A unique link will appear below the button. This link is specific to your team's data.
+          Tap <strong>Copy</strong> to copy it to your clipboard.
+        </p>
+      </li>
+      <li class="step">
+        <p>
+          Share the link with your Team's Appointed Admin via <strong>WhatsApp, Telegram</strong>,
+          or any messaging app. They should save it as a bookmark on their phone.
+        </p>
+      </li>
+    </ol>
+
+    <figure class="ss-figure">
+      <img src="images/SS-11.png" alt="Admin Settings tab showing the Publish Team Info card with the Publish button, and the Reset All Equipment card below it" />
+      <figcaption>Scroll down in the Settings tab to find the <strong>Publish Team Info</strong> card. Tap the button to upload your team's data and generate a shareable link.</figcaption>
+    </figure>
+
+    <figure class="ss-figure">
+      <img src="images/SS-12.png" alt="Admin Settings tab after publishing, showing the generated team URL in a text field with a Copy button beside it" />
+      <figcaption>After publishing, the unique team link appears below the button. Tap <strong>Copy</strong> and share it via WhatsApp or Telegram with your Team's Appointed Admin.</figcaption>
+    </figure>
+
+    <h2 class="sub-title">How Your Team Opens the App</h2>
+    <p style="color: var(--text-secondary); margin-bottom: 16px; font-size: 14.5px; line-height: 1.75;">
+      When your Team's Appointed Admin opens the shared link, the app loads automatically
+      with your team's servers, walkies, and lift cards. They do not need to do any setup.
+    </p>
+
+    <div class="callout note">
+      <div class="callout-ico">🔄</div>
+      <p>
+        <strong>Re-publish whenever the list changes.</strong>
+        If you add a new server, walkie, or lift card, you need to publish again and share
+        the updated link. The existing link will be replaced with a new one reflecting the
+        latest data.
+      </p>
+    </div>
+
+    <div class="callout tip">
+      <div class="callout-ico">💡</div>
+      <p>
+        <strong>Publish ≠ live sync.</strong>
+        Publishing shares your team's <em>setup</em> (who's on the list, what equipment exists).
+        It does not share live sign-out activity during a service. For that, see
+        <a href="#handover" style="color: var(--gold); text-decoration: underline;">Section 04 — Handing Over</a>.
+      </p>
+    </div>
+
+  </section>
+
+
+  <!-- ───────────────────────────────────────
+       SECTION 7 — RESETTING AFTER A SERVICE
+  ─────────────────────────────────────── -->
+  <section class="section" id="reset">
+
+    <div class="s-eyebrow">
+      <span class="s-num">Section 07</span>
+      <span class="badge c">Coordinator</span>
+    </div>
+
+    <h1 class="s-title">Resetting After<br>a Service</h1>
+
+    <p class="s-intro">
+      Once all equipment has been returned at the end of a service, reset the app so it is
+      clean and ready for the next service. This clears all current sign-out records.
+    </p>
+
+    <div class="access-box">
+      <div class="access-box-ico">⚙️</div>
+      <p>
+        Go to the <strong>Admin area</strong> (gear icon → PIN) and then navigate to
+        the <strong>Settings</strong> tab.
+      </p>
+    </div>
+
+    <ol class="steps">
+      <li class="step">
+        <p>
+          Before resetting, confirm on the <a href="#return" style="color: var(--gold); text-decoration: underline;">Return screen</a>
+          that all equipment has been returned — the screen should show no items signed out.
+        </p>
+      </li>
+      <li class="step"><p>Go to <strong>Admin → Settings</strong> and scroll down to the <strong>Reset</strong> card.</p></li>
+      <li class="step"><p>Tap <strong>Reset All Equipment</strong> and confirm when prompted.</p></li>
+    </ol>
+
+    <div class="callout warn">
+      <div class="callout-ico">⚠️</div>
+      <p>
+        <strong>What gets cleared.</strong>
+        Reset clears all sign-out records for walkies and lift cards — every item is marked
+        as available again. <strong>The server list, walkie list, and lift card list are not
+        affected</strong> — they carry over to the next service.
+      </p>
+    </div>
+
+    <figure class="ss-figure">
+      <img src="images/SS-11.png" alt="Admin Settings tab showing the Reset All Equipment card at the bottom of the page" />
+      <figcaption>The <strong>Reset All Equipment</strong> button is at the bottom of the Settings tab. This clears all sign-outs for walkies and lift cards — the server and equipment lists are unaffected.</figcaption>
+    </figure>
+
+  </section>
+
+
+  <!-- ───────────────────────────────────────
+       SECTION 8 — ACTIVITY LOG
+  ─────────────────────────────────────── -->
+  <section class="section" id="log">
+
+    <div class="s-eyebrow">
+      <span class="s-num">Section 08</span>
+      <span class="badge c">Coordinator</span>
+    </div>
+
+    <h1 class="s-title">Activity Log</h1>
+
+    <p class="s-intro">
+      The Activity Log records every sign-out and return during the service with a timestamp
+      and the server's name. Use it to investigate any discrepancies or to confirm that all
+      equipment was properly returned.
+    </p>
+
+    <div class="access-box">
+      <div class="access-box-ico">⚙️</div>
+      <p>Go to <strong>Admin → Log</strong> tab.</p>
+    </div>
+
+    <p style="color: var(--text-secondary); margin-bottom: 18px; font-size: 14.5px; line-height: 1.75;">
+      Each log entry shows:
+    </p>
+    <ul style="list-style: none; margin-bottom: 24px;">
+      <li style="padding: 6px 0 6px 18px; position: relative; color: var(--text-secondary); font-size: 14.5px; border-bottom: 1px solid var(--border-subtle);">
+        <span style="position:absolute; left:0; color: var(--gold);">→</span>
+        <strong style="color: var(--text);">Action type</strong> — "Collected" (green) or "Returned" (red)
+      </li>
+      <li style="padding: 6px 0 6px 18px; position: relative; color: var(--text-secondary); font-size: 14.5px; border-bottom: 1px solid var(--border-subtle);">
+        <span style="position:absolute; left:0; color: var(--gold);">→</span>
+        <strong style="color: var(--text);">Item</strong> — whether it was a Walkie or Lift Card, and its number
+      </li>
+      <li style="padding: 6px 0 6px 18px; position: relative; color: var(--text-secondary); font-size: 14.5px; border-bottom: 1px solid var(--border-subtle);">
+        <span style="position:absolute; left:0; color: var(--gold);">→</span>
+        <strong style="color: var(--text);">Server name</strong> — who collected or returned it
+      </li>
+      <li style="padding: 6px 0 6px 18px; position: relative; color: var(--text-secondary); font-size: 14.5px;">
+        <span style="position:absolute; left:0; color: var(--gold);">→</span>
+        <strong style="color: var(--text);">Timestamp</strong> — the date and time of the action
+      </li>
+    </ul>
+
+    <p style="font-weight: 600; color: var(--text); margin-bottom: 8px; font-size: 14px;">To clear the log:</p>
+    <ol class="steps">
+      <li class="step"><p>On the Log tab, tap <strong>Clear Log</strong> in the top-right corner.</p></li>
+      <li class="step"><p>Confirm when prompted. The log will be permanently cleared.</p></li>
+    </ol>
+
+    <figure class="ss-figure">
+      <img src="images/SS-14.png" alt="Admin Log tab showing 7 activity entries with a mix of Collected and Returned actions, server names, and timestamps" />
+      <figcaption>The Activity Log — each entry shows the action (<strong>Collected</strong> in green or <strong>Returned</strong> in red), the item, the server's name, and the exact time. Tap <strong>Clear Log</strong> in the top-right to wipe it after a service.</figcaption>
+    </figure>
+
+    <div class="callout tip">
+      <div class="callout-ico">💡</div>
+      <p>
+        <strong>Clear after each service.</strong>
+        Consider clearing the log after the Reset step at the end of each service, so the
+        log only ever reflects the most recent session's activity. This makes it easier to
+        investigate any issues.
+      </p>
+    </div>
+
+  </section>
+
+
+  <!-- ───────────────────────────────────────
+       SECTION 9 — QUICK REFERENCE
+  ─────────────────────────────────────── -->
+  <section class="section" id="quickref">
+
+    <div class="s-eyebrow">
+      <span class="s-num">Section 09</span>
+      <span class="badge all">All users</span>
+    </div>
+
+    <h1 class="s-title">Quick Reference</h1>
+
+    <div class="ref-table-wrap">
+      <table class="ref-table">
+        <thead>
+          <tr>
+            <th>Task</th>
+            <th>Who</th>
+            <th>Where to go</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Record a server collecting equipment</td>
+            <td><span class="badge a" style="font-size:9.5px;">Appointed Admin</span></td>
+            <td><span class="path">Home → Collect Walkie / Lift Card</span></td>
+          </tr>
+          <tr>
+            <td>Record equipment being returned</td>
+            <td><span class="badge a" style="font-size:9.5px;">Appointed Admin</span></td>
+            <td><span class="path">Home → Return Walkie / Lift Card</span></td>
+          </tr>
+          <tr>
+            <td>Hand over to another device mid-service</td>
+            <td><span class="badge a" style="font-size:9.5px;">Appointed Admin</span></td>
+            <td><span class="path">Admin → Data → Copy / Import</span></td>
+          </tr>
+          <tr>
+            <td>Add or edit servers</td>
+            <td><span class="badge c" style="font-size:9.5px;">Coordinator</span></td>
+            <td><span class="path">Admin → Servers</span></td>
+          </tr>
+          <tr>
+            <td>Add, edit, or disable walkies</td>
+            <td><span class="badge c" style="font-size:9.5px;">Coordinator</span></td>
+            <td><span class="path">Admin → Walkies</span></td>
+          </tr>
+          <tr>
+            <td>Add, edit, or disable lift cards</td>
+            <td><span class="badge c" style="font-size:9.5px;">Coordinator</span></td>
+            <td><span class="path">Admin → Lift Cards</span></td>
+          </tr>
+          <tr>
+            <td>Share the team setup with another device</td>
+            <td><span class="badge c" style="font-size:9.5px;">Coordinator</span></td>
+            <td><span class="path">Admin → Settings → Publish Team Info</span></td>
+          </tr>
+          <tr>
+            <td>Reset all sign-outs after a service</td>
+            <td><span class="badge c" style="font-size:9.5px;">Coordinator</span></td>
+            <td><span class="path">Admin → Settings → Reset All Equipment</span></td>
+          </tr>
+          <tr>
+            <td>Review who collected or returned what</td>
+            <td><span class="badge c" style="font-size:9.5px;">Coordinator</span></td>
+            <td><span class="path">Admin → Log</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2 class="sub-title" style="margin-top: 40px;">Equipment Limits</h2>
+    <p style="color: var(--text-secondary); margin-bottom: 16px; font-size: 14px;">
+      These limits apply per sign-out transaction. A server can only be issued up to these
+      quantities in a single collection.
+    </p>
+    <div class="limits-grid">
+      <div class="limit-item">
+        <div class="limit-n">2</div>
+        <div class="limit-lbl">walkies per sign-out</div>
+      </div>
+      <div class="limit-item">
+        <div class="limit-n">2</div>
+        <div class="limit-lbl">lift cards per sign-out</div>
+      </div>
+    </div>
+
+  </section>
+
+
+  <!-- ───────────────────────────────────────
+       APPENDIX — SCREENSHOT CHECKLIST
+  ─────────────────────────────────────── -->
+  <section class="section" id="screenshots-appendix">
+
+    <div class="s-eyebrow">
+      <span class="s-num">Appendix</span>
+    </div>
+
+    <h1 class="s-title">Screenshot<br>Checklist</h1>
+
+    <p class="s-intro">
+      The following screenshots are needed to complete this guide. Capture them on a phone
+      in portrait orientation with real data loaded. Placeholders appear throughout the guide
+      where each screenshot should be inserted.
+    </p>
+
+    <div class="appendix-grid">
+
+      <div class="appendix-item">
+        <div class="appendix-id">SS-01</div>
+        <div class="appendix-title">Home Screen</div>
+        <div class="appendix-desc">Full home screen showing event name, date, item count summary, both main buttons, and gear icon.</div>
+      </div>
+
+      <div class="appendix-item">
+        <div class="appendix-id">SS-02</div>
+        <div class="appendix-title">Collect — Letter Grid</div>
+        <div class="appendix-desc">The A–Z letter picker screen after tapping "Collect Walkie / Lift Card".</div>
+      </div>
+
+      <div class="appendix-item">
+        <div class="appendix-id">SS-03</div>
+        <div class="appendix-title">Collect — Name List with Badge</div>
+        <div class="appendix-desc">Name list after selecting a letter; at least one server should show an orange "has walkie #X" badge.</div>
+      </div>
+
+      <div class="appendix-item">
+        <div class="appendix-id">SS-04</div>
+        <div class="appendix-title">Collect — Equipment Selection</div>
+        <div class="appendix-desc">Equipment grid with one walkie selected (red highlight). Done button visible at bottom.</div>
+      </div>
+
+      <div class="appendix-item">
+        <div class="appendix-id">SS-05</div>
+        <div class="appendix-title">Return — Active Tiles</div>
+        <div class="appendix-desc">Return screen with several active tiles showing walkie/card numbers and server names.</div>
+      </div>
+
+      <div class="appendix-item">
+        <div class="appendix-id">SS-06</div>
+        <div class="appendix-title">Return — Returned (Dimmed) Tile</div>
+        <div class="appendix-desc">Return screen after tapping one tile — it should appear greyed/faded while others are still active.</div>
+      </div>
+
+      <div class="appendix-item">
+        <div class="appendix-id">SS-07</div>
+        <div class="appendix-title">Home — Gear Icon</div>
+        <div class="appendix-desc">Home screen highlighting the gear icon in the top-right corner as the Admin entry point.</div>
+      </div>
+
+      <div class="appendix-item">
+        <div class="appendix-id">SS-08</div>
+        <div class="appendix-title">Admin — Servers Tab</div>
+        <div class="appendix-desc">Servers tab showing the Add Server form and a list of at least 3–4 existing servers with Edit/Delete buttons.</div>
+      </div>
+
+      <div class="appendix-item">
+        <div class="appendix-id">SS-09</div>
+        <div class="appendix-title">Admin — Walkies Tab (with badges)</div>
+        <div class="appendix-desc">Walkies tab showing at least one "in use" badge and one "unusable" badge visible in the list.</div>
+      </div>
+
+      <div class="appendix-item">
+        <div class="appendix-id">SS-10</div>
+        <div class="appendix-title">Admin — Lift Cards Tab</div>
+        <div class="appendix-desc">Lift Cards tab showing the Add Lift Card form and existing cards list with status badges if possible.</div>
+      </div>
+
+      <div class="appendix-item">
+        <div class="appendix-id">SS-11</div>
+        <div class="appendix-title">Settings — Publish (Before)</div>
+        <div class="appendix-desc">Settings tab showing the Publish Team Info card with just the Publish button — before tapping it.</div>
+      </div>
+
+      <div class="appendix-item">
+        <div class="appendix-id">SS-12</div>
+        <div class="appendix-title">Settings — Publish (After, with URL)</div>
+        <div class="appendix-desc">Settings tab after publishing, showing the generated URL in the text field and Copy button.</div>
+      </div>
+
+      <div class="appendix-item">
+        <div class="appendix-id">SS-13</div>
+        <div class="appendix-title">Admin — Data Tab</div>
+        <div class="appendix-desc">Data tab showing both the Export (Copy to Clipboard) card and the Import (paste text area) card.</div>
+      </div>
+
+      <div class="appendix-item">
+        <div class="appendix-id">SS-14</div>
+        <div class="appendix-title">Admin — Log Tab</div>
+        <div class="appendix-desc">Log tab with several entries showing a mix of Collected/Returned actions, server names, and timestamps. Clear Log button visible.</div>
+      </div>
+
+    </div>
+
+    <div class="callout tip" style="margin-top: 32px;">
+      <div class="callout-ico">📐</div>
+      <p>
+        <strong>Capture tips:</strong>
+        Take screenshots in portrait mode on a phone screen. Ensure the status bar (time/battery)
+        is hidden or clean. Where possible use real server names and equipment numbers rather than
+        test data. Screenshots with real content are more useful to readers.
+      </p>
+    </div>
+
+  </section>
+
+</div>
+</main>
+
+<!-- ═══════════════════════════════════════
+     JAVASCRIPT
+═══════════════════════════════════════ -->
+<script>
+  const sidebar  = document.getElementById('sidebar');
+  const overlay  = document.getElementById('overlay');
+  const hbg      = document.getElementById('hbg');
+  const navItems = document.querySelectorAll('a.nav-item');
+
+  // ── Sidebar Toggle ──────────────────────
+  function openSidebar() {
+    sidebar.classList.add('open');
+    overlay.classList.add('on');
+    hbg.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeSidebar() {
+    sidebar.classList.remove('open');
+    overlay.classList.remove('on');
+    hbg.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  hbg.addEventListener('click', () => {
+    sidebar.classList.contains('open') ? closeSidebar() : openSidebar();
+  });
+
+  overlay.addEventListener('click', closeSidebar);
+
+  // Close sidebar on nav item click (mobile)
+  navItems.forEach(item => {
+    item.addEventListener('click', () => {
+      if (window.innerWidth <= 920) closeSidebar();
+    });
+  });
+
+  // ── Active Section Highlighting ─────────
+  const sections = document.querySelectorAll('.section, .subsection');
+
+  // Build a map of id → nav item
+  const navMap = {};
+  navItems.forEach(item => {
+    const href = item.getAttribute('href');
+    if (href && href.startsWith('#')) {
+      navMap[href.slice(1)] = item;
+    }
+  });
+
+  // Also map subsections to their parent nav item as fallback
+  const subsectionParentMap = {
+    'setup-servers':   'setup',
+    'setup-walkies':   'setup',
+    'setup-liftcards': 'setup',
+  };
+
+  let activeId = null;
+
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const id = entry.target.id;
+        if (id && id !== activeId) {
+          activeId = id;
+          navItems.forEach(n => n.classList.remove('active'));
+
+          // Try direct match first
+          if (navMap[id]) {
+            navMap[id].classList.add('active');
+          } else if (subsectionParentMap[id] && navMap[subsectionParentMap[id]]) {
+            // Fall back to parent
+            navMap[subsectionParentMap[id]].classList.add('active');
+          }
+        }
+      }
+    });
+  }, {
+    rootMargin: '-20% 0px -70% 0px',
+    threshold: 0
+  });
+
+  sections.forEach(s => { if (s.id) io.observe(s); });
+
+  // ── Smooth scroll offset for fixed mobile header ──
+  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function(e) {
+      const target = document.querySelector(this.getAttribute('href'));
+      if (!target) return;
+      e.preventDefault();
+      const offset = window.innerWidth <= 920 ? 70 : 20;
+      const top = target.getBoundingClientRect().top + window.scrollY - offset;
+      window.scrollTo({ top, behavior: 'smooth' });
+    });
+  });
+</script>
+
+</body>
+</html>

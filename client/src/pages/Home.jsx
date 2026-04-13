@@ -60,6 +60,22 @@ function Home() {
             </Button>
           </Link>
         </div>
+
+        <div className="text-center mt-6">
+          <a
+            href="/user-guide.html"
+            target="_blank"
+            rel="noopener noreferrer"
+            className={`inline-flex items-center gap-1.5 text-sm transition-colors ${isLunarTheme ? 'text-amber-300/50 hover:text-amber-300' : 'text-zinc-600 hover:text-zinc-400'}`}
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <circle cx="12" cy="12" r="10"/>
+              <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
+              <path d="M12 17h.01"/>
+            </svg>
+            User Guide
+          </a>
+        </div>
       </div>
     </PageWrapper>
   );
