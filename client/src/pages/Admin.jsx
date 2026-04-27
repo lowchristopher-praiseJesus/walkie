@@ -25,6 +25,8 @@ function Admin() {
   const [publishLoading, setPublishLoading] = useState(false);
   const [publishedUrl, setPublishedUrl] = useState(() => storage.getPublishedUrl());
   const [copyLabel, setCopyLabel] = useState('Copy');
+  const [showResetModal, setShowResetModal] = useState(false);
+  const [resetConfirmText, setResetConfirmText] = useState('');
 
   const fetchAuditLog = () => {
     setAuditLog(storage.getAuditLog());
@@ -178,12 +180,18 @@ function Admin() {
   };
 
   const handleResetAllEquipment = () => {
-    if (!confirm('Reset all equipment? This will clear all sign-outs for walkies and lift cards.')) return;
+    setResetConfirmText('');
+    setShowResetModal(true);
+  };
+
+  const handleConfirmReset = () => {
     try {
       storage.resetWalkies();
       storage.resetLiftCards();
+      storage.logReset();
       sessionStorage.removeItem('returnPageState');
       refresh();
+      setShowResetModal(false);
       showMessage('success', 'All equipment reset');
     } catch (err) {
       showMessage('error', err.message);
@@ -793,28 +801,80 @@ function Admin() {
                 <div className="text-center py-8 text-zinc-500">No activity recorded yet</div>
               ) : (
                 <div className="space-y-2">
-                  {auditLog.map(entry => (
-                    <div key={entry.id} className={`p-3 bg-zinc-800 rounded-lg ${entry.action === 'sign-out' ? 'text-green-400' : 'text-red-400'}`}>
-                      <div className="flex items-center gap-2 mb-1">
-                        <Badge variant={entry.action === 'sign-out' ? 'warning' : 'success'}>
-                          {entry.action === 'sign-out' ? 'Collected' : 'Returned'}
-                        </Badge>
-                        <span className="font-medium">
-                          {entry.itemType === 'walkie' ? 'Walkie' : 'Lift Card'} #{entry.itemNumber}
-                        </span>
+                  {auditLog.map(entry => {
+                    if (entry.action === 'reset') {
+                      return (
+                        <div key={entry.id} className="p-3 bg-zinc-800 rounded-lg text-orange-400">
+                          <div className="flex items-center gap-2 mb-1">
+                            <Badge variant="danger">Reset</Badge>
+                            <span className="font-medium">All Equipment Reset</span>
+                          </div>
+                          <div className="flex justify-end text-sm">
+                            <span className="opacity-70">{formatTimestamp(entry.timestamp)}</span>
+                          </div>
+                        </div>
+                      );
+                    }
+                    return (
+                      <div key={entry.id} className={`p-3 bg-zinc-800 rounded-lg ${entry.action === 'sign-out' ? 'text-green-400' : 'text-red-400'}`}>
+                        <div className="flex items-center gap-2 mb-1">
+                          <Badge variant={entry.action === 'sign-out' ? 'warning' : 'success'}>
+                            {entry.action === 'sign-out' ? 'Collected' : 'Returned'}
+                          </Badge>
+                          <span className="font-medium">
+                            {entry.itemType === 'walkie' ? 'Walkie' : 'Lift Card'} #{entry.itemNumber}
+                          </span>
+                        </div>
+                        <div className="flex justify-between text-sm">
+                          <span>{entry.volunteerName}</span>
+                          <span className="opacity-70">{formatTimestamp(entry.timestamp)}</span>
+                        </div>
                       </div>
-                      <div className="flex justify-between text-sm">
-                        <span>{entry.volunteerName}</span>
-                        <span className="opacity-70">{formatTimestamp(entry.timestamp)}</span>
-                      </div>
-                    </div>
-                  ))}
+                    );
+                  })}
                 </div>
               )}
             </div>
           )}
         </Tabs>
       </div>
+
+      {showResetModal && (
+        <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
+          <div className="bg-zinc-900 border border-zinc-700 rounded-xl p-6 w-full max-w-sm space-y-4">
+            <h2 className="text-lg font-semibold text-white">Confirm Reset</h2>
+            <p className="text-sm text-zinc-400">
+              This will clear all sign-outs for walkies and lift cards. This action cannot be undone.
+            </p>
+            <p className="text-sm text-zinc-300">
+              Type <span className="font-mono font-bold text-red-400">reset</span> to confirm:
+            </p>
+            <Input
+              value={resetConfirmText}
+              onChange={e => setResetConfirmText(e.target.value)}
+              placeholder="Type 'reset' to confirm"
+              autoFocus
+            />
+            <div className="flex gap-3 pt-1">
+              <Button
+                variant="outline"
+                className="flex-1"
+                onClick={() => setShowResetModal(false)}
+              >
+                Cancel
+              </Button>
+              <Button
+                variant="destructive"
+                className="flex-1"
+                disabled={resetConfirmText !== 'reset'}
+                onClick={handleConfirmReset}
+              >
+                Reset All Equipment
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
     </PageWrapper>
   );
 }

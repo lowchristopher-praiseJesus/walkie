@@ -195,6 +195,10 @@ export const storage = {
     write(KEYS.walkies, walkies);
   },
 
+  logReset() {
+    addAuditEntry({ action: 'reset' });
+  },
+
   // Lift Cards
   getLiftCards() {
     return read(KEYS.liftCards) || [];
