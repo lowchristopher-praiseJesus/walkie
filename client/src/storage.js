@@ -199,6 +199,39 @@ export const storage = {
     addAuditEntry({ action: 'reset' });
   },
 
+  replayActivityLog() {
+    const entries = read(KEYS.auditLog) || [];
+    const sorted = [...entries].sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
+
+    // Only replay up to (not including) the most recent reset
+    let replayUpTo = sorted.length;
+    for (let i = sorted.length - 1; i >= 0; i--) {
+      if (sorted[i].action === 'reset') { replayUpTo = i; break; }
+    }
+    const toReplay = sorted.slice(0, replayUpTo);
+
+    const walkies = this.getWalkies().map(w => ({ ...w, assignedTo: null, assignedAt: null }));
+    const liftCards = this.getLiftCards().map(lc => ({ ...lc, assignedTo: null, assignedAt: null }));
+
+    for (const entry of toReplay) {
+      if (entry.action === 'reset') {
+        walkies.forEach(w => { w.assignedTo = null; w.assignedAt = null; });
+        liftCards.forEach(lc => { lc.assignedTo = null; lc.assignedAt = null; });
+      } else if (entry.action === 'sign-out') {
+        const items = entry.itemType === 'walkie' ? walkies : liftCards;
+        const item = items.find(i => i.number === entry.itemNumber);
+        if (item) { item.assignedTo = entry.volunteerId; item.assignedAt = entry.timestamp; }
+      } else if (entry.action === 'return') {
+        const items = entry.itemType === 'walkie' ? walkies : liftCards;
+        const item = items.find(i => i.number === entry.itemNumber);
+        if (item) { item.assignedTo = null; item.assignedAt = null; }
+      }
+    }
+
+    write(KEYS.walkies, walkies);
+    write(KEYS.liftCards, liftCards);
+  },
+
   // Lift Cards
   getLiftCards() {
     return read(KEYS.liftCards) || [];

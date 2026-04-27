@@ -229,6 +229,17 @@ function Admin() {
     }
   };
 
+  const handleReplayActivityLog = () => {
+    if (!confirm('Restore equipment state to just before the last reset? Current assignments will be overwritten.')) return;
+    try {
+      storage.replayActivityLog();
+      refresh();
+      showMessage('success', 'Equipment state restored from activity log');
+    } catch (err) {
+      showMessage('error', err.message);
+    }
+  };
+
   const handlePublishServerList = async () => {
     setPublishLoading(true);
     try {
@@ -791,9 +802,14 @@ function Admin() {
                   Activity Log ({auditLog.length} entries)
                 </h3>
                 {auditLog.length > 0 && (
-                  <Button size="sm" variant="destructive" onClick={handleClearAuditLog}>
-                    Clear Log
-                  </Button>
+                  <div className="flex gap-2">
+                    <Button size="sm" variant="outline" onClick={handleReplayActivityLog}>
+                      Restore State
+                    </Button>
+                    <Button size="sm" variant="destructive" onClick={handleClearAuditLog}>
+                      Clear Log
+                    </Button>
+                  </div>
                 )}
               </div>
 
