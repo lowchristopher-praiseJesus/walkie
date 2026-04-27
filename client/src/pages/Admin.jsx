@@ -27,6 +27,8 @@ function Admin() {
   const [copyLabel, setCopyLabel] = useState('Copy');
   const [showResetModal, setShowResetModal] = useState(false);
   const [resetConfirmText, setResetConfirmText] = useState('');
+  const [showRestoreModal, setShowRestoreModal] = useState(false);
+  const [restoreConfirmText, setRestoreConfirmText] = useState('');
 
   const fetchAuditLog = () => {
     setAuditLog(storage.getAuditLog());
@@ -230,10 +232,15 @@ function Admin() {
   };
 
   const handleReplayActivityLog = () => {
-    if (!confirm('Restore equipment state to just before the last reset? Current assignments will be overwritten.')) return;
+    setRestoreConfirmText('');
+    setShowRestoreModal(true);
+  };
+
+  const handleConfirmRestore = () => {
     try {
       storage.replayActivityLog();
       refresh();
+      setShowRestoreModal(false);
       showMessage('success', 'Equipment state restored from activity log');
     } catch (err) {
       showMessage('error', err.message);
@@ -886,6 +893,43 @@ function Admin() {
                 onClick={handleConfirmReset}
               >
                 Reset All Equipment
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {showRestoreModal && (
+        <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
+          <div className="bg-zinc-900 border border-zinc-700 rounded-xl p-6 w-full max-w-sm space-y-4">
+            <h2 className="text-lg font-semibold text-white">Restore State</h2>
+            <p className="text-sm text-zinc-400">
+              This will restore equipment assignments to just before the last reset. Current assignments will be overwritten.
+            </p>
+            <p className="text-sm text-zinc-300">
+              Type <span className="font-mono font-bold text-blue-400">restore</span> to confirm:
+            </p>
+            <Input
+              value={restoreConfirmText}
+              onChange={e => setRestoreConfirmText(e.target.value)}
+              placeholder="Type 'restore' to confirm"
+              autoFocus
+            />
+            <div className="flex gap-3 pt-1">
+              <Button
+                variant="outline"
+                className="flex-1"
+                onClick={() => setShowRestoreModal(false)}
+              >
+                Cancel
+              </Button>
+              <Button
+                variant="default"
+                className="flex-1"
+                disabled={restoreConfirmText !== 'restore'}
+                onClick={handleConfirmRestore}
+              >
+                Restore State
               </Button>
             </div>
           </div>
